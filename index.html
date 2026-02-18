@@ -3,70 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>RAM Alerta App</title>
+    <title>RAM Alerta Live</title>
     <link rel="manifest" href="manifest.json">
     <style>
-        :root { --danger: #ff4444; --warning: #ffbb33; --info: #33b5e5; --dark: #1a1a1a; }
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #000; color: #fff; margin: 0; padding-bottom: 70px; }
-        .header { background: var(--dark); padding: 15px; text-align: center; border-bottom: 2px solid var(--danger); position: sticky; top: 0; z-index: 100; }
-        .feed { padding: 10px; }
-        .alert-card { background: #222; border-radius: 12px; padding: 15px; margin-bottom: 12px; border-left: 5px solid #555; animation: slideIn 0.3s ease-out; }
-        .alert-card.transito { border-left-color: var(--warning); }
-        .alert-card.fogo { border-left-color: var(--danger); }
-        .alert-card.meteo { border-left-color: var(--info); }
-        .time { font-size: 0.8rem; color: #888; }
-        .tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: bold; text-transform: uppercase; margin-bottom: 5px; }
-        .tab-bar { position: fixed; bottom: 0; width: 100%; background: var(--dark); display: flex; justify-content: space-around; padding: 10px 0; border-top: 1px solid #333; }
-        .tab-item { color: #888; text-decoration: none; font-size: 0.7rem; text-align: center; flex: 1; }
-        .tab-item.active { color: var(--danger); }
-        @keyframes slideIn { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        :root { --danger: #ff4444; --warning: #ffbb33; --info: #33b5e5; }
+        body { font-family: sans-serif; background: #000; color: #fff; margin: 0; padding: 15px; padding-bottom: 80px; }
+        .header { text-align: center; border-bottom: 2px solid var(--danger); padding-bottom: 10px; margin-bottom: 20px; }
+        .card { background: #1a1a1a; border-radius: 10px; padding: 15px; margin-bottom: 12px; border-left: 6px solid #444; animation: slideIn 0.3s ease; }
+        .transito { border-left-color: var(--warning); }
+        .fogo { border-left-color: var(--danger); }
+        .meteo { border-left-color: var(--info); }
+        .meta { font-size: 0.8rem; color: #888; margin-bottom: 5px; }
+        .msg { font-size: 1.1rem; font-weight: bold; }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
-
-    <div class="header">
-        <h2 style="margin:0; color: var(--danger);">RAM ALERTA</h2>
-    </div>
-
-    <div class="feed" id="app-feed">
-        <p style="text-align:center;">A carregar alertas da Madeira...</p>
-    </div>
-
-    <div class="tab-bar">
-        <a href="#" class="tab-item active" onclick="loadContent('todos')"><div>🏠</div>Início</a>
-        <a href="https://www.facebook.com/groups/ramalerta" class="tab-item"><div>👥</div>Grupo</a>
-        <a href="tel:112" class="tab-item" style="color:var(--danger)"><div>🚨</div>SOS</a>
-    </div>
+    <div class="header"><h2>RAM ALERTA</h2></div>
+    <div id="feed">A carregar alertas da Madeira...</div>
 
     <script>
-        // Simulação de base de dados que podes gerir via Google Sheets
-        const dbURL = "COLOCA_AQUI_O_LINK_DO_TEU_GOOGLE_SHEETS_JSON"; 
+        const csvURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQEfr4nu_M1gV1E2d2cUZdpgKwVgffuXMINk5VSpxu9yJwVOCvnekQTwJ82BezSGT1MT0CCnXxkK_tl/pub?gid=0&single=true&output=csv";
 
-        const mockData = [
-            { tipo: 'transito', local: 'Via Rápida - Gaula', msg: 'Trânsito parado devido a avaria.', hora: 'Agora' },
-            { tipo: 'fogo', local: 'Camacha', msg: 'Fogo em zona de mato. Bombeiros a caminho.', hora: 'Há 10 min' },
-            { tipo: 'meteo', local: 'Caniçal', msg: 'Vento muito forte. Atenção a objetos soltos.', hora: 'Há 1h' }
-        ];
 
-        function render(data) {
-            const container = document.getElementById('app-feed');
-            container.innerHTML = data.map(item => `
-                <div class="alert-card ${item.tipo}">
-                    <div class="tag" style="background:${getCol(item.tipo)}">${item.tipo}</div>
-                    <div class="time">${item.hora} • ${item.local}</div>
-                    <div style="margin-top:8px; font-weight:500;">${item.msg}</div>
-                </div>
-            `).join('');
+        async function carregarAlertas() {
+            try {
+                const response = await fetch(csvURL);
+                const data = await response.text();
+                const linhas = data.split('\n').slice(1); // Ignora o cabeçalho
+                
+                let html = '';
+                linhas.reverse().forEach(linha => {
+                    const colunas = linha.split(',');
+                    if(colunas.length >= 4) {
+                        const [tipo, local, msg, hora] = colunas;
+                        html += `
+                        <div class="card ${tipo.trim().toLowerCase()}">
+                            <div class="meta">${hora} • ${local}</div>
+                            <div class="msg">${msg}</div>
+                        </div>`;
+                    }
+                });
+                document.getElementById('feed').innerHTML = html || "Sem alertas de momento.";
+            } catch (error) {
+                document.getElementById('feed').innerHTML = "Erro ao carregar dados.";
+            }
         }
 
-        function getCol(t) {
-            if(t==='fogo') return '#ff4444';
-            if(t==='transito') return '#ffbb33';
-            return '#33b5e5';
-        }
-
-        // Inicia com dados de exemplo
-        render(mockData);
+        // Atualiza automaticamente a cada 30 segundos
+        setInterval(carregarAlertas, 30000);
+        carregarAlertas();
     </script>
 </body>
 </html>

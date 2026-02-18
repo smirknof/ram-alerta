@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>RAM Alerta</title>
     <link rel="icon" type="image/png" href="icon.png">
-    <link rel="apple-touch-icon" href="icon.png">
     <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
     <script>
       window.OneSignalDeferred = window.OneSignalDeferred || [];
@@ -19,26 +18,46 @@
       });
     </script>
     <style>
-        :root { --danger: #ff4444; --info: #33b5e5; --bg: #000; --card: #1c1c1e; --fb: #1877F2; --tg: #0088cc; }
+        :root { --fire: #ff0000; --glow: #ff4d4d; --bg: #000; --card: #1c1c1e; --danger: #ff4444; }
         body { font-family: -apple-system, sans-serif; background: var(--bg); color: #fff; margin: 0; padding: 15px; padding-bottom: 130px; text-align: center; }
         .logo-img { max-width: 100px; height: auto; margin-top: 10px; }
         .weather-box { background: var(--card); border-radius: 12px; padding: 12px; margin: 15px 0; border: 1px solid #333; }
         .btn-link { background: var(--card); color: #fff; text-decoration: none; padding: 18px; border-radius: 12px; display: block; margin-bottom: 12px; border: 1px solid #444; font-weight: bold; }
-        .btn-112 { background: var(--danger); border: none; font-size: 1.5rem; padding: 22px; }
-        .btn-link span { color: var(--danger); display: block; font-size: 0.8rem; margin-bottom: 4px; }
+        .btn-112 { background: var(--danger); border: none; font-size: 1.5rem; padding: 22px; box-shadow: 0 0 15px rgba(255, 68, 68, 0.4); }
+        
+        /* ALERTAS COM EFEITO DE BRILHO (GLOW) */
         #feed { margin-top: 25px; text-align: left; }
-        .alert-card { background: var(--card); border-radius: 15px; padding: 15px; margin-bottom: 15px; border-left: 6px solid var(--danger); }
-        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: #121212; display: flex; gap: 8px; padding: 12px; border-top: 1px solid #333; z-index: 1000; }
+        .alert-card { 
+            background: var(--card); 
+            border-radius: 15px; 
+            padding: 18px; 
+            margin-bottom: 15px; 
+            border-left: 6px solid var(--fire); 
+            color: var(--fire);
+            font-weight: 900; /* Letra mais grossa */
+            text-transform: uppercase;
+            /* O SEGREDO DO BRILHO AQUI: */
+            text-shadow: 0 0 8px var(--glow), 0 0 15px rgba(255, 0, 0, 0.6);
+            letter-spacing: 1px;
+            animation: pulse 2s infinite; /* Pulsação suave */
+        }
+        @keyframes pulse {
+            0% { text-shadow: 0 0 8px var(--glow); }
+            50% { text-shadow: 0 0 15px var(--glow), 0 0 25px var(--fire); }
+            100% { text-shadow: 0 0 8px var(--glow); }
+        }
+        .alert-meta { font-size: 0.75rem; color: #aaa; margin-bottom: 8px; text-shadow: none; font-weight: normal; text-transform: none; }
+
+        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: #121212; display: flex; gap: 8px; padding: 12px; border-top: 1px solid #333; }
         .nav-item { flex: 1; text-align: center; padding: 15px; border-radius: 10px; text-decoration: none; font-weight: bold; color: white; font-size: 0.8rem; }
-        .bg-fb { background: var(--fb); } .bg-tg { background: var(--tg); }
+        .bg-fb { background: #1877F2; } .bg-tg { background: #0088cc; }
     </style>
 </head>
 <body>
     <img src="logo.png" class="logo-img" onerror="this.style.display='none'">
-    <h1 style="margin: 5px 0 15px 0;">RAM ALERTA</h1>
+    <h1 style="margin: 5px 0 15px 0; letter-spacing: -1px;">RAM ALERTA</h1>
     <div class="weather-box">
-        <div style="font-size: 0.7rem; color: #888; text-transform: uppercase;">Previsão Chuva: Funchal</div>
-        <div id="rain-status" style="font-size: 1.1rem; font-weight: bold; color: var(--info); margin-top: 5px;">A carregar...</div>
+        <div id="rain-status" style="font-size: 1.1rem; font-weight: bold; color: #33b5e5;">A carregar previsão...</div>
     </div>
     <a href="tel:112" class="btn-link btn-112">🚑 112 - EMERGÊNCIA</a>
     <div style="display: flex; gap: 10px;">
@@ -56,8 +75,8 @@
                 const res = await fetch("https://api.open-meteo.com/v1/forecast?latitude=32.65&longitude=-16.90&current_weather=true&hourly=precipitation_probability");
                 const data = await res.json();
                 const prob = data.hourly.precipitation_probability[new Date().getHours()];
-                document.getElementById('rain-status').innerText = prob > 30 ? `⚠️ Possibilidade de Chuva (${prob}%)` : `☀️ Sem previsão de chuva (${prob}%)`;
-            } catch (e) { document.getElementById('rain-status').innerText = "Previsão indisponível"; }
+                document.getElementById('rain-status').innerText = prob > 30 ? `⚠️ Chuva no Funchal: ${prob}%` : `☀️ Céu Limpo no Funchal: ${prob}%`;
+            } catch (e) { document.getElementById('rain-status').innerText = "Tempo indisponível"; }
         }
         async function fetchAlerts() {
             try {
@@ -68,7 +87,7 @@
                 lines.forEach(line => {
                     const cols = line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
                     if(cols[2]) {
-                        html += `<div class="alert-card"><div style="font-size:0.7rem;color:#888">${cols[3] || ''} • ${cols[1] || ''}</div><b style="display:block;margin-top:5px;">${cols[2]}</b></div>`;
+                        html += `<div class="alert-card"><div class="alert-meta">${cols[3] || ''} • ${cols[1] || ''}</div>${cols[2]}</div>`;
                     }
                 });
                 document.getElementById('feed').innerHTML = html || "Sem alertas recentes.";

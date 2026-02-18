@@ -18,36 +18,29 @@
       });
     </script>
     <style>
-        :root { --fire: #ff0000; --glow: #ff4d4d; --bg: #000; --card: #1c1c1e; --danger: #ff4444; }
+        :root { --fire: #ff0000; --glow: #ff4d4d; --bg: #000; --card: #1c1c1e; --info: #33b5e5; --yellow: #ffcc00; }
         body { font-family: -apple-system, sans-serif; background: var(--bg); color: #fff; margin: 0; padding: 15px; padding-bottom: 130px; text-align: center; }
         .logo-img { max-width: 100px; height: auto; margin-top: 10px; }
-        .weather-box { background: var(--card); border-radius: 12px; padding: 12px; margin: 15px 0; border: 1px solid #333; }
-        .btn-link { background: var(--card); color: #fff; text-decoration: none; padding: 18px; border-radius: 12px; display: block; margin-bottom: 12px; border: 1px solid #444; font-weight: bold; }
-        .btn-112 { background: var(--danger); border: none; font-size: 1.5rem; padding: 22px; box-shadow: 0 0 15px rgba(255, 68, 68, 0.4); }
+        .weather-box { background: var(--card); border-radius: 12px; padding: 15px; margin: 15px 0; border: 1px solid #333; }
         
-        /* ALERTAS COM EFEITO DE BRILHO (GLOW) */
-        #feed { margin-top: 25px; text-align: left; }
-        .alert-card { 
-            background: var(--card); 
-            border-radius: 15px; 
-            padding: 18px; 
-            margin-bottom: 15px; 
-            border-left: 6px solid var(--fire); 
-            color: var(--fire);
-            font-weight: 900; /* Letra mais grossa */
-            text-transform: uppercase;
-            /* O SEGREDO DO BRILHO AQUI: */
-            text-shadow: 0 0 8px var(--glow), 0 0 15px rgba(255, 0, 0, 0.6);
-            letter-spacing: 1px;
-            animation: pulse 2s infinite; /* Pulsação suave */
+        /* BOTÕES GERAIS */
+        .btn-link { background: var(--card); color: #fff; text-decoration: none; padding: 18px; border-radius: 12px; display: block; margin-bottom: 12px; border: 1px solid #444; font-weight: bold; transition: 0.3s; }
+        .btn-112 { background: #ff4444; border: none; font-size: 1.5rem; padding: 22px; margin-bottom: 15px; }
+        
+        /* ALTERAÇÃO: BOTÕES AMARELOS COM SOMBRA */
+        .btn-yellow { 
+            background: var(--yellow) !important; 
+            color: #000 !important; 
+            border: none !important;
+            box-shadow: 0 4px 10px rgba(255, 204, 0, 0.4); /* Sombra amarela */
+            text-shadow: none;
         }
-        @keyframes pulse {
-            0% { text-shadow: 0 0 8px var(--glow); }
-            50% { text-shadow: 0 0 15px var(--glow), 0 0 25px var(--fire); }
-            100% { text-shadow: 0 0 8px var(--glow); }
-        }
-        .alert-meta { font-size: 0.75rem; color: #aaa; margin-bottom: 8px; text-shadow: none; font-weight: normal; text-transform: none; }
+        .btn-yellow span { color: #333 !important; font-weight: 900; }
 
+        #feed { margin-top: 25px; text-align: left; }
+        .alert-card { background: var(--card); border-radius: 15px; padding: 18px; margin-bottom: 15px; border-left: 6px solid var(--fire); color: var(--fire); font-weight: 900; text-transform: uppercase; text-shadow: 0 0 8px var(--glow); animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { text-shadow: 0 0 8px var(--glow); } 50% { text-shadow: 0 0 15px var(--glow); } 100% { text-shadow: 0 0 8px var(--glow); } }
+        .alert-meta { font-size: 0.75rem; color: #aaa; margin-bottom: 8px; font-weight: normal; text-transform: none; text-shadow: none; }
         .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: #121212; display: flex; gap: 8px; padding: 12px; border-top: 1px solid #333; }
         .nav-item { flex: 1; text-align: center; padding: 15px; border-radius: 10px; text-decoration: none; font-weight: bold; color: white; font-size: 0.8rem; }
         .bg-fb { background: #1877F2; } .bg-tg { background: #0088cc; }
@@ -55,28 +48,35 @@
 </head>
 <body>
     <img src="logo.png" class="logo-img" onerror="this.style.display='none'">
-    <h1 style="margin: 5px 0 15px 0; letter-spacing: -1px;">RAM ALERTA</h1>
+    <h1 style="margin: 5px 0 15px 0;">RAM ALERTA</h1>
     <div class="weather-box">
-        <div id="rain-status" style="font-size: 1.1rem; font-weight: bold; color: #33b5e5;">A carregar previsão...</div>
+        <div id="weather-info" style="font-size: 1.1rem; font-weight: bold; color: var(--info);">A carregar...</div>
     </div>
+    
     <a href="tel:112" class="btn-link btn-112">🚑 112 - EMERGÊNCIA</a>
+    
     <div style="display: flex; gap: 10px;">
-        <a href="tel:800205215" class="btn-link" style="flex:1"><span>800 205 215</span>VIA LITORAL</a>
-        <a href="tel:800241241" class="btn-link" style="flex:1"><span>800 241 241</span>VIA EXPRESSO</a>
+        <a href="tel:800205215" class="btn-link btn-yellow" style="flex:1"><span>800 205 215</span>VIA LITORAL</a>
+        <a href="tel:800241241" class="btn-link btn-yellow" style="flex:1"><span>800 241 241</span>VIA EXPRESSO</a>
     </div>
+
     <div id="feed">A carregar alertas...</div>
+
     <div class="bottom-nav">
         <a href="https://www.facebook.com/share/g/1ATEH8rvEb/" class="nav-item bg-fb">FACEBOOK</a>
         <a href="https://t.me/acidenteseocorrenciasnaram" class="nav-item bg-tg">TELEGRAM</a>
     </div>
+
     <script>
-        async function checkRain() {
+        async function checkWeather() {
             try {
                 const res = await fetch("https://api.open-meteo.com/v1/forecast?latitude=32.65&longitude=-16.90&current_weather=true&hourly=precipitation_probability");
                 const data = await res.json();
+                const temp = data.current_weather.temperature;
                 const prob = data.hourly.precipitation_probability[new Date().getHours()];
-                document.getElementById('rain-status').innerText = prob > 30 ? `⚠️ Chuva no Funchal: ${prob}%` : `☀️ Céu Limpo no Funchal: ${prob}%`;
-            } catch (e) { document.getElementById('rain-status').innerText = "Tempo indisponível"; }
+                const icon = prob > 30 ? "⚠️🌧️" : "☀️";
+                document.getElementById('weather-info').innerHTML = `${icon} Funchal: ${temp}°C | Chuva: ${prob}%`;
+            } catch (e) { document.getElementById('weather-info').innerText = "Dados indisponíveis"; }
         }
         async function fetchAlerts() {
             try {
@@ -93,7 +93,7 @@
                 document.getElementById('feed').innerHTML = html || "Sem alertas recentes.";
             } catch (e) {}
         }
-        checkRain(); fetchAlerts(); setInterval(fetchAlerts, 20000);
+        checkWeather(); fetchAlerts(); setInterval(checkWeather, 600000); setInterval(fetchAlerts, 20000);
     </script>
 </body>
 </html>

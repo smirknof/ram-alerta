@@ -24,23 +24,28 @@
         .weather-box { background: var(--card); border-radius: 12px; padding: 15px; margin: 15px 0; border: 1px solid #333; }
         
         /* BOTÕES GERAIS */
-        .btn-link { background: var(--card); color: #fff; text-decoration: none; padding: 18px; border-radius: 12px; display: block; margin-bottom: 12px; border: 1px solid #444; font-weight: bold; transition: 0.3s; }
-        .btn-112 { background: #ff4444; border: none; font-size: 1.5rem; padding: 22px; margin-bottom: 15px; }
+        .btn-link { background: var(--card); color: #fff; text-decoration: none; padding: 18px; border-radius: 12px; display: block; margin-bottom: 12px; border: 1px solid #444; font-weight: bold; }
+        .btn-112 { background: #ff4444; border: none; font-size: 1.5rem; padding: 22px; margin-bottom: 15px; color: #fff; }
         
-        /* ALTERAÇÃO: BOTÕES AMARELOS COM SOMBRA */
-        .btn-yellow { 
-            background: var(--yellow) !important; 
-            color: #000 !important; 
-            border: none !important;
-            box-shadow: 0 4px 10px rgba(255, 204, 0, 0.4); /* Sombra amarela */
-            text-shadow: none;
+        /* ALTERAÇÃO: APENAS LETRAS AMARELAS COM SOMBRA */
+        .btn-yellow-text { 
+            color: var(--yellow) !important; 
+            text-shadow: 0 0 5px rgba(255, 204, 0, 0.6); /* Brilho amarelo nas letras */
+            border: 1px solid #555 !important;
         }
-        .btn-yellow span { color: #333 !important; font-weight: 900; }
+        .btn-yellow-text span { 
+            color: var(--yellow) !important; 
+            font-size: 0.8rem; 
+            display: block; 
+            margin-bottom: 4px;
+            font-weight: 900;
+        }
 
         #feed { margin-top: 25px; text-align: left; }
         .alert-card { background: var(--card); border-radius: 15px; padding: 18px; margin-bottom: 15px; border-left: 6px solid var(--fire); color: var(--fire); font-weight: 900; text-transform: uppercase; text-shadow: 0 0 8px var(--glow); animation: pulse 2s infinite; }
         @keyframes pulse { 0% { text-shadow: 0 0 8px var(--glow); } 50% { text-shadow: 0 0 15px var(--glow); } 100% { text-shadow: 0 0 8px var(--glow); } }
         .alert-meta { font-size: 0.75rem; color: #aaa; margin-bottom: 8px; font-weight: normal; text-transform: none; text-shadow: none; }
+        
         .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: #121212; display: flex; gap: 8px; padding: 12px; border-top: 1px solid #333; }
         .nav-item { flex: 1; text-align: center; padding: 15px; border-radius: 10px; text-decoration: none; font-weight: bold; color: white; font-size: 0.8rem; }
         .bg-fb { background: #1877F2; } .bg-tg { background: #0088cc; }
@@ -49,6 +54,7 @@
 <body>
     <img src="logo.png" class="logo-img" onerror="this.style.display='none'">
     <h1 style="margin: 5px 0 15px 0;">RAM ALERTA</h1>
+    
     <div class="weather-box">
         <div id="weather-info" style="font-size: 1.1rem; font-weight: bold; color: var(--info);">A carregar...</div>
     </div>
@@ -56,8 +62,8 @@
     <a href="tel:112" class="btn-link btn-112">🚑 112 - EMERGÊNCIA</a>
     
     <div style="display: flex; gap: 10px;">
-        <a href="tel:800205215" class="btn-link btn-yellow" style="flex:1"><span>800 205 215</span>VIA LITORAL</a>
-        <a href="tel:800241241" class="btn-link btn-yellow" style="flex:1"><span>800 241 241</span>VIA EXPRESSO</a>
+        <a href="tel:800205215" class="btn-link btn-yellow-text" style="flex:1"><span>800 205 215</span>VIA LITORAL</a>
+        <a href="tel:800241241" class="btn-link btn-yellow-text" style="flex:1"><span>800 241 241</span>VIA EXPRESSO</a>
     </div>
 
     <div id="feed">A carregar alertas...</div>

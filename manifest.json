@@ -1,0 +1,25 @@
+{
+  "short_name": "RAM Alerta",
+  "name": "RAM Alerta - Monitorização Madeira",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/564/564619.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": "index.html",
+  "background_color": "#000000",
+  "display": "standalone",
+  "scope": "/",
+  "theme_color": "#ff4444",
+  "shortcuts": [
+    {
+      "name": "Ver Trânsito",
+      "short_name": "Trânsito",
+      "url": "index.html?filter=transito",
+      "icons": [{ "src": "https://cdn-icons-png.flaticon.com/512/741/741407.png", "sizes": "192x192" }]
+    }
+  ]
+}

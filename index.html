@@ -16,51 +16,65 @@
     </script>
 
     <style>
-        :root { --danger: #ff4444; --warning: #ffbb33; --info: #33b5e5; --bg: #000; --card: #1c1c1e; --whatsapp: #25D366; --facebook: #1877F2; }
-        body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg); color: #fff; margin: 0; padding: 15px; padding-bottom: 90px; }
+        :root { --danger: #ff4444; --warning: #ffbb33; --info: #33b5e5; --bg: #000; --card: #1c1c1e; --whatsapp: #25D366; --facebook: #1877F2; --sea: #0077be; }
+        body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg); color: #fff; margin: 0; padding: 15px; padding-bottom: 130px; }
         .header { text-align: center; border-bottom: 2px solid var(--danger); padding-bottom: 10px; margin-bottom: 20px; }
         
-        /* Meteorologia */
-        .weather-row { display: flex; gap: 10px; margin-bottom: 20px; }
-        .weather-card { background: var(--card); border-radius: 12px; padding: 12px; flex: 1; text-align: center; border: 1px solid #333; }
-        .temp { font-size: 1.4rem; font-weight: bold; color: var(--info); }
+        /* Grid de Info */
+        .grid-row { display: flex; gap: 10px; margin-bottom: 10px; }
+        .info-card { background: var(--card); border-radius: 12px; padding: 10px; flex: 1; text-align: center; border: 1px solid #333; }
+        .temp { font-size: 1.3rem; font-weight: bold; color: var(--info); }
+        .small-label { font-size: 0.65rem; color: #888; text-transform: uppercase; font-weight: bold; }
+
+        /* Botões de Emergência e Mar */
+        .emergency-row { display: flex; gap: 8px; margin-bottom: 15px; flex-wrap: wrap; }
+        .btn-action { flex: 1; background: #2c2c2e; color: #fff; text-decoration: none; padding: 10px; border-radius: 12px; text-align: center; border: 1px solid #444; font-weight: bold; font-size: 0.75rem; min-width: 45%; }
+        .btn-action span { display: block; color: var(--danger); font-size: 0.9rem; margin-bottom: 2px; }
+        .btn-action.sea span { color: var(--sea); }
 
         /* Cartões de Alerta */
-        .card { background: var(--card); border-radius: 15px; padding: 15px; margin-bottom: 15px; border-left: 6px solid #444; position: relative; }
+        .card { background: var(--card); border-radius: 15px; padding: 15px; margin-bottom: 15px; border-left: 6px solid #444; }
         .transito { border-left-color: var(--warning); }
         .fogo { border-left-color: var(--danger); }
         .meteo { border-left-color: var(--info); }
         .meta { font-size: 0.8rem; color: #8e8e93; margin-bottom: 5px; font-weight: bold; }
         .msg { font-size: 1.1rem; font-weight: 600; display: block; margin-bottom: 12px; line-height: 1.4; }
 
-        /* Botão Enviar WhatsApp do Alerta */
         .btn-send { background: var(--whatsapp); color: white; text-decoration: none; padding: 10px 15px; border-radius: 25px; font-size: 0.85rem; font-weight: bold; display: inline-flex; align-items: center; gap: 8px; }
 
         /* MENU FIXO NO FUNDO */
         .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: #121212; display: flex; border-top: 1px solid #333; padding: 12px; z-index: 1000; gap: 10px; }
-        .nav-item { flex: 1; text-align: center; padding: 12px; border-radius: 10px; text-decoration: none; font-weight: bold; font-size: 0.85rem; color: white; }
+        .nav-item { flex: 1; text-align: center; padding: 12px; border-radius: 10px; text-decoration: none; font-weight: bold; font-size: 0.8rem; color: white; }
         .bg-fb { background: var(--facebook); }
         .bg-wa { background: #34c759; }
+        .bg-farmacia { background: #fff; color: #000; display: flex; align-items: center; justify-content: center; }
     </style>
 </head>
 <body>
 
     <div class="header"><h1>RAM ALERTA</h1></div>
 
-    <div class="weather-row">
-        <div class="weather-card"><small>Funchal</small><div id="tf" class="temp">--°C</div></div>
-        <div class="weather-card"><small>Camacha</small><div id="tc" class="temp">--°C</div></div>
+    <div class="grid-row">
+        <div class="info-card"><div class="small-label">Funchal</div><div id="tf" class="temp">--°C</div></div>
+        <div class="info-card"><div class="small-label">Camacha</div><div id="tc" class="temp">--°C</div></div>
     </div>
 
-    <div id="feed">A ligar aos servidores...</div>
+    <div class="emergency-row">
+        <a href="tel:800205215" class="btn-action"><span>800 205 215</span>VIA LITORAL</a>
+        <a href="tel:800241241" class="btn-action"><span>800 241 241</span>VIA EXPRESSO</a>
+        <a href="https://www.amn.pt/Capitanias/Funchal/Paginas/Editais.aspx" target="_blank" class="btn-action sea"><span>⚓ MAR</span>AVISOS CAPITANIA</a>
+        <a href="https://www.netmadeira.com/webcams-madeira" target="_blank" class="btn-action sea"><span>🎥 WEBCAMS</span>ESTADO DAS VIAS</a>
+    </div>
+
+    <div id="feed">A carregar alertas...</div>
 
     <div class="bottom-nav">
-        <a href="https://www.facebook.com/share/g/1ATEH8rvEb/" class="nav-item bg-fb">FACEBOOK</a>
-        <a href="https://wa.me/351935995838" class="nav-item bg-wa">ADMIN WHATSAPP</a>
+        <a href="https://www.facebook.com/share/g/1ATEH8rvEb/" target="_blank" class="nav-item bg-fb">FACEBOOK</a>
+        <a href="https://farmaciasdeservico.net/madeira" target="_blank" class="nav-item bg-farmacia">💊 FARMÁCIAS</a>
+        <a href="https://wa.me/351935995838" target="_blank" class="nav-item bg-wa">ADMIN WA</a>
     </div>
 
     <script>
-        // LINK DIRETO SEM REDIRECIONAMENTOS
         const csvURL = "https://docs.google.com/spreadsheets/d/1vQEfr4nu_M1gV1E2d2cUZdpgKwVgffuXMINk5VSpxu9yJw/export?format=csv";
 
         async function fetchWeather() {
@@ -76,16 +90,12 @@
             try {
                 const r = await fetch(csvURL);
                 const data = await r.text();
-                
-                // Limpeza anti-lixo: Só processa se não for código HTML do Google
                 if (data.includes("<!DOCTYPE") || data.length < 10) {
                     document.getElementById('feed').innerHTML = "<div style='text-align:center;color:#888'>A aguardar novos dados da Madeira...</div>";
                     return;
                 }
-
                 const lines = data.split('\n').slice(1);
                 let html = '';
-
                 lines.reverse().forEach(line => {
                     const cols = line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
                     if(cols.length >= 3) {
@@ -93,15 +103,8 @@
                         const local = cols[1].replace(/"/g, '').trim();
                         const msg = cols[2].replace(/"/g, '').trim();
                         const hora = cols[3] ? cols[3].replace(/"/g, '').trim() : '--:--';
-
                         const waLink = `https://wa.me/?text=` + encodeURIComponent(`🚨 *RAM ALERTA*\n📍 ${local}\n⚠️ ${msg}\n🕒 ${hora}\n\nVer mais: https://smirknof.github.io/ram-alerta/`);
-                        
-                        html += `
-                        <div class="card ${tipo}">
-                            <div class="meta">${hora} • ${local}</div>
-                            <span class="msg">${msg}</span>
-                            <a href="${waLink}" class="btn-send">Partilhar Alerta</a>
-                        </div>`;
+                        html += `<div class="card ${tipo}"><div class="meta">${hora} • ${local}</div><span class="msg">${msg}</span><a href="${waLink}" class="btn-send">Partilhar Alerta</a></div>`;
                     }
                 });
                 document.getElementById('feed').innerHTML = html || "Sem alertas de momento.";

@@ -3,56 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>RAM Alerta Live</title>
+    <title>RAM Alerta - Madeira</title>
     <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" href="icon.png">
+    
+    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+    <script>
+      window.OneSignalDeferred = window.OneSignalDeferred || [];
+      OneSignalDeferred.push(async function(OneSignal) {
+        await OneSignal.init({
+          appId: "ab3ef110-1713-4982-955a-f59b80a84170",
+        });
+      });
+    </script>
+
     <style>
-        :root { --danger: #ff4444; --warning: #ffbb33; --info: #33b5e5; }
-        body { font-family: sans-serif; background: #000; color: #fff; margin: 0; padding: 15px; padding-bottom: 80px; }
-        .header { text-align: center; border-bottom: 2px solid var(--danger); padding-bottom: 10px; margin-bottom: 20px; }
-        .card { background: #1a1a1a; border-radius: 10px; padding: 15px; margin-bottom: 12px; border-left: 6px solid #444; animation: slideIn 0.3s ease; }
+        :root { --danger: #ff4444; --warning: #ffbb33; --info: #33b5e5; --bg: #000; --card: #1a1a1a; --whatsapp: #25D366; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg); color: #fff; margin: 0; padding: 15px; }
+        .header { text-align: center; padding: 10px 0; border-bottom: 2px solid var(--danger); }
+        
+        /* Widget de Tempo */
+        .weather-row { display: flex; gap: 10px; margin: 15px 0; overflow-x: auto; padding-bottom: 5px; }
+        .weather-card { background: var(--card); border-radius: 8px; padding: 10px; min-width: 140px; text-align: center; border: 1px solid #333; }
+        .temp { font-size: 1.4rem; font-weight: bold; color: var(--info); }
+
+        /* Alertas */
+        .card { background: var(--card); border-radius: 10px; padding: 15px; margin-bottom: 12px; border-left: 6px solid #444; position: relative; }
         .transito { border-left-color: var(--warning); }
         .fogo { border-left-color: var(--danger); }
         .meteo { border-left-color: var(--info); }
         .meta { font-size: 0.8rem; color: #888; margin-bottom: 5px; }
-        .msg { font-size: 1.1rem; font-weight: bold; }
-        @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .msg { font-size: 1.1rem; font-weight: bold; margin-bottom: 10px; display: block; }
+        
+        /* Botão Partilha */
+        .share-btn { background: var(--whatsapp); color: white; border: none; border-radius: 5px; padding: 5px 10px; font-size: 0.8rem; font-weight: bold; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 5px; }
     </style>
 </head>
 <body>
-    <div class="header"><h2>RAM ALERTA</h2></div>
-    <div id="feed">A carregar alertas da Madeira...</div>
+
+    <div class="header"><h1>RAM ALERTA</h1></div>
+
+    <div class="weather-row" id="weather">
+        <div class="weather-card">
+            <small>FUNCHAL</small>
+            <div id="temp-funchal" class="temp">--°C</div>
+            <div id="desc-funchal" style="font-size: 0.8rem;">A carregar...</div>
+        </div>
+        <div class="weather-card">
+            <small>CAMACHA</small>
+            <div id="temp-camacha" class="temp">--°C</div>
+            <div id="desc-camacha" style="font-size: 0.8rem;">A carregar...</div>
+        </div>
+    </div>
+
+    <div id="feed">A carregar ocorrências...</div>
 
     <script>
         const csvURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQEfr4nu_M1gV1E2d2cUZdpgKwVgffuXMINk5VSpxu9yJwVOCvnekQTwJ82BezSGT1MT0CCnXxkK_tl/pub?gid=0&single=true&output=csv";
 
+        async function fetchWeather() {
+            try {
+                const response = await fetch("https://api.open-meteo.com/v1/forecast?latitude=32.65,32.70&longitude=-16.90,-16.85&current_weather=true");
+                const data = await response.json();
+                document.getElementById('temp-funchal').innerText = Math.round(data[0].current_weather.temperature) + "°C";
+                document.getElementById('temp-camacha').innerText = Math.round(data[1].current_weather.temperature) + "°C";
+                document.getElementById('desc-funchal').innerText = "Vento: " + data[0].current_weather.windspeed + "km/h";
+                document.getElementById('desc-camacha').innerText = "Vento: " + data[1].current_weather.windspeed + "km/h";
+            } catch (e) { }
+        }
 
-        async function carregarAlertas() {
+        async function fetchAlerts() {
             try {
                 const response = await fetch(csvURL);
                 const data = await response.text();
-                const linhas = data.split('\n').slice(1); // Ignora o cabeçalho
-                
+                const rows = data.split('\n').slice(1);
                 let html = '';
-                linhas.reverse().forEach(linha => {
-                    const colunas = linha.split(',');
-                    if(colunas.length >= 4) {
-                        const [tipo, local, msg, hora] = colunas;
-                        html += `
-                        <div class="card ${tipo.trim().toLowerCase()}">
-                            <div class="meta">${hora} • ${local}</div>
-                            <div class="msg">${msg}</div>
-                        </div>`;
+                rows.reverse().forEach(row => {
+                    const cols = row.split(',');
+                    if(cols.length >= 4) {
+                        const [tipo, local, msg, hora] = cols;
+                        const shareText = encodeURIComponent(`🚨 *RAM ALERTA* 🚨\n\n📍 *Local:* ${local}\n⚠️ *Aviso:* ${msg}\n🕒 *Hora:* ${hora}\n\nConsulte em tempo real: https://smirknof.github.io/ram-alerta/`);
+                        
+                        html += `<div class="card ${tipo.trim().toLowerCase()}">
+                                    <div class="meta">${hora} • ${local}</div>
+                                    <span class="msg">${msg}</span>
+                                    <a href="https://wa.me/?text=${shareText}" class="share-btn">Partilhar WhatsApp</a>
+                                 </div>`;
                     }
                 });
-                document.getElementById('feed').innerHTML = html || "Sem alertas de momento.";
-            } catch (error) {
-                document.getElementById('feed').innerHTML = "Erro ao carregar dados.";
-            }
+                document.getElementById('feed').innerHTML = html || "Sem alertas.";
+            } catch (e) { document.getElementById('feed').innerHTML = "Erro ao carregar dados."; }
         }
 
-        // Atualiza automaticamente a cada 30 segundos
-        setInterval(carregarAlertas, 30000);
-        carregarAlertas();
+        fetchWeather();
+        fetchAlerts();
+        setInterval(fetchAlerts, 60000);
     </script>
 </body>
 </html>

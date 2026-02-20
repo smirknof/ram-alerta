@@ -3,70 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>RAM ALERTA - CENTRAL ULTRA</title>
+    <title>RAM ALERTA - CENTRAL CROMÁTICA</title>
     <link rel="icon" type="image/png" href="icon.png">
     <style>
-        :root { --f: #ff1a1a; --y: #ffcc00; --b: #050505; --c: rgba(25,25,27,0.98); --i: #00e5ff; }
+        :root { --f: #ff1a1a; --y: #ffcc00; --g: #00ff44; --b: #050505; --c: rgba(25,25,27,0.98); --i: #00e5ff; }
         body { font-family: -apple-system, system-ui, sans-serif; background: var(--b); color: #fff; margin: 0; padding: 0; background: radial-gradient(circle at 50% 0%, #2a0000 0%, #050505 70%) fixed; }
         
-        /* BARRA DE CARREGAMENTO DINÂMICA */
         .prog { position: fixed; top: 0; height: 3px; background: linear-gradient(90deg, var(--f), var(--y)); z-index: 4000; animation: l 20s linear infinite; }
         @keyframes l { 0% { width: 0; } 100% { width: 100%; } }
         
-        /* TICKER SUPERIOR */
-        .t-wrap { position: sticky; top: 0; overflow: hidden; background: rgba(0,0,0,0.9); border-bottom: 1px solid var(--f); z-index: 3000; backdrop-filter: blur(10px); }
+        .t-wrap { position: sticky; top: 0; overflow: hidden; background: rgba(0,0,0,0.95); border-bottom: 1px solid var(--f); z-index: 3000; backdrop-filter: blur(10px); }
         .t { display: flex; white-space: nowrap; padding: 12px 0; animation: t 30s linear infinite; font-weight: 800; font-size: 0.8rem; text-transform: uppercase; }
         @keyframes t { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
 
         .cont { padding: 15px; padding-bottom: 120px; }
-        
-        /* LOGO BOX - DINAMISMO VISUAL */
-        .logo-box { width: 100%; height: 160px; border-radius: 20px; display: flex; align-items: center; justify-content: center; background: #000; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 15px; box-shadow: 0 0 20px rgba(255,0,0,0.2); position: relative; overflow: hidden; }
-        .logo-box img { max-width: 80%; max-height: 120px; z-index: 2; transition: 0.3s; }
-        .logo-box:active img { transform: scale(0.95); }
+        .logo-box { width: 100%; height: 160px; border-radius: 20px; display: flex; align-items: center; justify-content: center; background: #000; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 15px; box-shadow: 0 0 20px rgba(255,0,0,0.2); }
+        .logo-box img { max-width: 80%; max-height: 120px; }
 
-        /* DASHBOARD METEO E HORA */
         .dash { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
-        .box { background: var(--c); border-radius: 15px; padding: 15px; border: 1px solid rgba(255,255,255,0.1); text-align: center; backdrop-filter: blur(5px); }
+        .box { background: var(--c); border-radius: 15px; padding: 15px; border: 1px solid rgba(255,255,255,0.1); text-align: center; }
         .v { font-size: 1.5rem; font-weight: 900; }
-        .lbl { font-size: 0.6rem; color: var(--f); font-weight: 800; text-transform: uppercase; margin-top: 4px; letter-spacing: 1px; }
+        .lbl { font-size: 0.6rem; color: var(--f); font-weight: 800; text-transform: uppercase; margin-top: 4px; }
 
-        /* BOTÕES TÁTICOS */
-        .btn { background: var(--c); color: #fff; text-decoration: none; padding: 15px; border-radius: 15px; display: block; margin-bottom: 10px; border: 1px solid rgba(255,255,255,0.1); font-weight: 800; text-align: center; transition: 0.2s; }
-        .btn-r { background: linear-gradient(135deg, #0044ff, #00d4ff); border: none; box-shadow: 0 4px 15px rgba(0, 191, 255, 0.3); }
+        .btn { background: var(--c); color: #fff; text-decoration: none; padding: 15px; border-radius: 15px; display: block; margin-bottom: 10px; border: 1px solid rgba(255,255,255,0.1); font-weight: 800; text-align: center; }
         .btn-e { background: var(--f); border: none; animation: p 2s infinite; font-size: 1.1rem; }
         @keyframes p { 0% { box-shadow: 0 0 0 0 rgba(255,0,0,0.5); } 70% { box-shadow: 0 0 0 12px rgba(255,0,0,0); } 100% { box-shadow: 0 0 0 0 rgba(255,0,0,0); } }
 
-        /* FEED DE ALERTAS - CORREÇÃO DE LEITURA */
-        .card { background: var(--c); border-radius: 16px; padding: 18px; margin-bottom: 12px; border-left: 6px solid var(--f); box-shadow: 0 5px 15px rgba(0,0,0,0.3); animation: slide 0.4s ease-out; }
-        @keyframes slide { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .h { display: flex; justify-content: space-between; align-items: center; font-weight: 800; font-size: 0.75rem; color: #aaa; margin-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px; }
-        .time { color: var(--y); font-size: 1.1rem; font-weight: 900; }
-        .msg { font-weight: 700; font-size: 1rem; line-height: 1.5; color: #fff; word-wrap: break-word; text-transform: uppercase; }
-        .danger { border-left-color: var(--y); background: linear-gradient(90deg, rgba(255,204,0,0.08), transparent); }
+        /* DEFINIÇÕES DE PISCAR (SISTEMA CROMÁTICO) */
+        @keyframes blink-red { 0%, 100% { border-left-color: var(--f); box-shadow: inset 10px 0 15px -10px var(--f); } 50% { border-left-color: #fff; box-shadow: inset 15px 0 25px -10px var(--f); } }
+        @keyframes blink-yellow { 0%, 100% { border-left-color: var(--y); } 50% { border-left-color: #fff; } }
+        @keyframes blink-green { 0%, 100% { border-left-color: var(--g); } 50% { border-left-color: #fff; } }
 
-        /* NAV INFERIOR */
+        .card { background: var(--c); border-radius: 16px; padding: 18px; margin-bottom: 12px; border-left: 8px solid #444; box-shadow: 0 5px 15px rgba(0,0,0,0.4); display: flex; flex-direction: column; height: auto; }
+        
+        /* CLASSES DE ALERTA */
+        .alerta-acidente { animation: blink-red 1s infinite; border-left-color: var(--f); }
+        .alerta-avaria { animation: blink-yellow 1.5s infinite; border-left-color: var(--y); }
+        .alerta-info { animation: blink-green 2s infinite; border-left-color: var(--g); }
+
+        .h { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px; }
+        .time { color: var(--y); font-size: 1.3rem; font-weight: 900; }
+        .loc { color: #aaa; font-size: 0.8rem; font-weight: 800; text-transform: uppercase; }
+        .msg { font-weight: 700; font-size: 1.1rem; line-height: 1.4; color: #fff; word-wrap: break-word; text-transform: uppercase; }
+
         .nav { position: fixed; bottom: 0; left: 0; right: 0; background: #000; display: flex; gap: 8px; padding: 12px; border-top: 1px solid var(--f); z-index: 3000; }
         .nav a { flex: 1; text-align: center; padding: 12px; border-radius: 10px; text-decoration: none; font-weight: 800; color: #fff; font-size: 0.7rem; }
     </style>
 </head>
 <body>
     <div class="prog"></div>
-    <div class="t-wrap"><div class="t" id="ticker">A SINCRONIZAR CENTRAL RAM...</div></div>
+    <div class="t-wrap"><div class="t" id="ticker">SINCRONIZANDO CENTRAL TÁTICA RAM...</div></div>
 
     <div class="cont">
         <div class="logo-box"><img src="logo.png" alt="RAM ALERTA"></div>
         
-        <a href="https://www.vialitoral.com/map" target="_blank" class="btn btn-r">📡 MONITOR RADAR (VIALITORAL)</a>
-
         <div class="dash">
             <div class="box"><div class="v" id="clock">00:00:00</div><div class="lbl">HORA ACTUAL</div></div>
             <div class="box"><div class="v" id="w" style="color:var(--i)">--°C</div><div class="lbl" id="rn">MADEIRA</div></div>
-        </div>
-
-        <div style="display:flex; gap:10px; margin-bottom:10px">
-            <a href="tel:800205215" class="btn" style="flex:1; color:var(--y)">800 205 215<br><small style="color:#888">VIALITORAL</small></a>
-            <a href="tel:800241241" class="btn" style="flex:1; color:var(--y)">800 241 241<br><small style="color:#888">VIAEXPRESSO</small></a>
         </div>
 
         <a href="tel:112" class="btn btn-e">🚑 112 EMERGÊNCIA</a>
@@ -79,21 +72,18 @@
     </div>
 
     <script>
-        // Relógio 24h rigoroso
         function upClock() { document.getElementById('clock').innerText = new Date().toLocaleTimeString('pt-PT', {hour12:false}); }
         setInterval(upClock, 1000); upClock();
 
-        // Meteorologia resiliente
         async function getW() {
             try {
                 const r = await fetch("https://api.open-meteo.com/v1/forecast?latitude=32.65&longitude=-16.90&current_weather=true&hourly=precipitation_probability");
                 const d = await r.json();
                 document.getElementById('w').innerText = Math.round(d.current_weather.temperature)+"°C";
                 document.getElementById('rn').innerText = (d.hourly.precipitation_probability[new Date().getHours()] || 0)+"% CHUVA";
-            } catch(e) { document.getElementById('w').innerText = "N/A"; }
+            } catch(e) {}
         }
 
-        // Motor de Alertas (Fix Horas e Texto)
         async function getA() {
             try {
                 const r = await fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vQEfr4nu_M1gVlE2d2cUZdpgKwVgffuXMlNk5VSpxu9yJwVOCvnekQTwJ82BezSGTiMT0CCnXxkK_tI/pub?gid=0&single=true&output=csv&t="+Date.now());
@@ -101,34 +91,39 @@
                 const lines = t.split(/\r?\n/).slice(1);
                 let html = ''; let tk = '';
                 
-                // Processamento reverso para os mais recentes no topo
                 lines.reverse().forEach(l => {
-                    const c = l.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
-                    if(c[2] && c[2].trim() !== "") {
-                        // Regex para capturar HH:MM na primeira coluna
-                        let tm = c[0].replace(/"/g,'').match(/(\d{1,2}:\d{2})/);
-                        let time = tm ? tm[0] : "INFO";
+                    const c = l.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(s => s.replace(/"/g,'').trim());
+                    if(c.length >= 3) {
+                        let tipoRaw = c[0] ? c[0].toLowerCase() : "";
+                        let loc = c[1] || "GERAL";
+                        let msg = c[2] || "";
+                        let time = c[3] || "--:--";
                         
-                        let loc = c[1] ? c[1].replace(/"/g,'').trim() : "MADEIRA";
-                        let msg = c[2] ? c[2].replace(/"/g,'').trim() : "";
+                        // LÓGICA DE CLASSIFICAÇÃO CROMÁTICA
+                        let blinkClass = "alerta-info"; // Padrão Verde
+                        if(msg.includes("ACIDENTE") || tipoRaw.includes("acidente")) {
+                            blinkClass = "alerta-acidente"; // Vermelho
+                        } else if(tipoRaw.includes("avaria") || msg.includes("AVARIADO")) {
+                            blinkClass = "alerta-avaria"; // Amarelo
+                        } else if(tipoRaw.includes("informação") || tipoRaw.includes("info")) {
+                            blinkClass = "alerta-info"; // Verde
+                        }
                         
-                        let isD = msg.toUpperCase().includes("ACIDENTE") || msg.toUpperCase().includes("RETENÇÃO");
-                        
-                        html += `<div class="card ${isD?'danger':''}">
-                            <div class="h"><span class="time">🕒 ${time}</span><span>${loc}</span></div>
+                        html += `<div class="card ${blinkClass}">
+                            <div class="h"><span class="time">🕒 ${time}</span><span class="loc">${loc}</span></div>
                             <div class="msg">${msg}</div>
                         </div>`;
                         tk += ` ⚠️ ${loc}: ${msg} | `;
                     }
                 });
-                document.getElementById('feed').innerHTML = html || "<p style='text-align:center;color:#888'>Sem alertas no momento.</p>";
+                document.getElementById('feed').innerHTML = html || "<p style='text-align:center;color:#888'>Sem alertas.</p>";
                 if(tk) document.getElementById('ticker').innerText = tk;
-            } catch(e) { document.getElementById('feed').innerHTML = "<p style='text-align:center;color:red'>Erro de sincronização...</p>"; }
+            } catch(e) {}
         }
 
         getW(); getA(); 
-        setInterval(getA, 20000); // Atualiza alertas a cada 20s
-        setInterval(getW, 600000); // Atualiza clima a cada 10 min
+        setInterval(getA, 20000); 
+        setInterval(getW, 600000);
     </script>
 </body>
 </html>

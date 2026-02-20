@@ -6,45 +6,47 @@
     <title>RAM Alerta Pro Dashboard</title>
     <style>
         :root { --fire: #ff0000; --glow: #ff4d4d; --bg: #000; --card: rgba(28, 28, 30, 0.95); --info: #33b5e5; --yellow: #ffcc00; }
-        
         body { font-family: -apple-system, system-ui, sans-serif; background: #000; color: #fff; margin: 0; padding: 0; overflow-x: hidden; }
 
-        /* BARRA DE ATUALIZAÇÃO */
         .refresh-bar { position: fixed; top: 0; left: 0; height: 3px; background: var(--fire); z-index: 3000; animation: load-bar 20s linear infinite; }
         @keyframes load-bar { 0% { width: 0%; } 100% { width: 100%; } }
 
         .container { padding: 15px; padding-bottom: 130px; }
 
-        /* WIDGET DO MAPA EM PONTO PEQUENO */
+        /* WIDGET DO MAPA CORRIGIDO */
         .mini-map-box {
             width: 100%;
-            height: 250px; /* Altura reduzida para ser compacto */
-            background: #fff;
+            height: 220px;
+            background: #1a1a1a;
             border-radius: 15px;
             overflow: hidden;
             border: 2px solid var(--fire);
             box-shadow: 0 0 15px rgba(255, 0, 0, 0.4);
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            /* Fundo com imagem de satélite estática para dar estilo */
+            background-image: url('https://www.vialitoral.com/wp-content/themes/vialitoral/assets/img/mapa_vialitoral.jpg');
+            background-size: cover;
+            background-position: center;
         }
-        .mini-map-box iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-            /* Ajuste de zoom via escala se necessário, mas o iframe oficial adapta-se */
-        }
-        .map-tag {
-            position: absolute;
-            bottom: 8px;
-            right: 8px;
-            background: rgba(255, 0, 0, 0.9);
-            color: white;
-            font-size: 0.6rem;
-            padding: 2px 8px;
+
+        .map-overlay-btn {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px;
             border-radius: 10px;
+            border: 1px solid var(--fire);
+            color: white;
+            text-decoration: none;
             font-weight: bold;
-            pointer-events: none;
+            font-size: 0.9rem;
+            backdrop-filter: blur(5px);
         }
+
+        .map-tag { position: absolute; bottom: 8px; right: 8px; background: var(--fire); color: white; font-size: 0.6rem; padding: 2px 8px; border-radius: 10px; font-weight: bold; }
 
         /* DASHBOARD */
         .dashboard { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
@@ -53,16 +55,15 @@
         .weather-val { font-size: 1.2rem; font-weight: 900; color: var(--info); }
 
         /* BOTÕES */
-        .btn-link { background: var(--card); color: #fff; text-decoration: none; padding: 15px; border-radius: 12px; display: block; margin-bottom: 10px; border: 1px solid #444; font-weight: bold; text-align: center; transition: 0.2s; }
+        .btn-link { background: var(--card); color: #fff; text-decoration: none; padding: 15px; border-radius: 12px; display: block; margin-bottom: 10px; border: 1px solid #444; font-weight: bold; text-align: center; }
         .btn-112 { background: var(--fire); border: none; font-size: 1.2rem; animation: pulse 1.5s infinite; }
         @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(255,0,0,0.6); } 70% { box-shadow: 0 0 0 10px rgba(255,0,0,0); } 100% { box-shadow: 0 0 0 0 rgba(255,0,0,0); } }
         .btn-yellow-text { color: var(--yellow) !important; font-size: 0.85rem; }
 
         /* ALERTAS */
-        .alert-card { background: var(--card); border-radius: 12px; padding: 15px; margin-bottom: 10px; border-left: 5px solid var(--fire); animation: slideIn 0.4s ease-out; }
+        .alert-card { background: var(--card); border-radius: 12px; padding: 15px; margin-bottom: 10px; border-left: 5px solid var(--fire); }
         .alert-meta { font-size: 0.75rem; color: #aaa; margin-bottom: 4px; font-weight: bold; }
         .alert-msg { font-weight: 900; color: #ff4d4d; text-transform: uppercase; font-size: 0.85rem; }
-        @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: #0a0a0a; display: flex; gap: 8px; padding: 15px; border-top: 1px solid var(--fire); z-index: 2000; }
         .nav-item { flex: 1; text-align: center; padding: 12px; border-radius: 8px; text-decoration: none; font-weight: bold; color: white; font-size: 0.75rem; }
@@ -73,7 +74,10 @@
 
     <div class="container">
         <div class="mini-map-box">
-            <iframe src="https://www.vialitoral.com/mapa/"></iframe>
+            <a href="https://www.vialitoral.com/mapa/" target="_blank" class="map-overlay-btn">
+                📍 ABRIR MAPA INTERATIVO<br>
+                <span style="font-size: 0.6rem; font-weight: normal;">(CÂMARAS E OCORRÊNCIAS)</span>
+            </a>
             <div class="map-tag">LIVE RADAR</div>
         </div>
 
@@ -84,7 +88,7 @@
             </div>
             <div class="dash-box">
                 <div id="weather-info" class="weather-val">--°C</div>
-                <div id="rain-info" style="font-size: 0.55rem; color: #888; font-weight: bold;">FUNCHAL METEO</div>
+                <div id="rain-info" style="font-size: 0.55rem; color: #888; font-weight: bold;">MADEIRA METEO</div>
             </div>
         </div>
 
@@ -95,7 +99,7 @@
             <a href="tel:800241241" class="btn-link btn-yellow-text" style="flex:1">800 241 241<br>VIA EXPRESSO</a>
         </div>
 
-        <div id="feed">A ler rede de satélites...</div>
+        <div id="feed">A ligar aos satélites...</div>
     </div>
 
     <div class="bottom-nav">
@@ -114,7 +118,7 @@
                 const res = await fetch("https://api.open-meteo.com/v1/forecast?latitude=32.65&longitude=-16.90&current_weather=true&hourly=precipitation_probability");
                 const data = await res.json();
                 document.getElementById('weather-info').innerText = `${Math.round(data.current_weather.temperature)}°C`;
-                document.getElementById('rain-info').innerText = `${data.hourly.precipitation_probability[new Date().getHours()]}% PRECIPITAÇÃO`;
+                document.getElementById('rain-info').innerText = `${data.hourly.precipitation_probability[new Date().getHours()]}% CHUVA`;
             } catch (e) {}
         }
 
@@ -139,7 +143,7 @@
                 alerts.slice(0,10).forEach(a => {
                     html += `<div class="alert-card"><div class="alert-meta">🕒 ${a.time} • ${a.local}</div><div class="alert-msg">${a.msg}</div></div>`;
                 });
-                document.getElementById('feed').innerHTML = html || "SEM OCORRÊNCIAS REGISTADAS";
+                document.getElementById('feed').innerHTML = html || "SEM ALERTAS ACTIVOS";
             } catch (e) {}
         }
 

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>RAM ALERTA - V18 TOTAL</title>
+    <title>RAM ALERTA - V18.2 Compacta</title>
     
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#ff4d4d">
@@ -18,59 +18,56 @@
         :root { --f: #ff4d4d; --y: #ffcc00; --g: #00ff88; --b: #050505; --c: rgba(20,20,22,0.98); --i: #00e5ff; }
         body { font-family: -apple-system, system-ui, sans-serif; background: var(--b); color: #fff; margin: 0; padding: 0; background: radial-gradient(circle at 50% 0%, #1a0000 0%, #050505 80%) fixed; }
         
-        /* BARRA E TICKER */
         .prog { position: fixed; top: 0; height: 3px; background: linear-gradient(90deg, var(--f), var(--y)); z-index: 4000; animation: l 25s linear infinite; }
         @keyframes l { 0% { width: 0; } 100% { width: 100%; } }
         .t-wrap { position: sticky; top: 0; overflow: hidden; background: rgba(0,0,0,0.95); border-bottom: 2px solid var(--f); z-index: 3000; backdrop-filter: blur(10px); }
-        .t { display: flex; white-space: nowrap; padding: 12px 0; animation: t 35s linear infinite; font-weight: 800; font-size: 0.8rem; text-transform: uppercase; color: #fff; }
+        .t { display: flex; white-space: nowrap; padding: 10px 0; animation: t 35s linear infinite; font-weight: 800; font-size: 0.75rem; text-transform: uppercase; color: #fff; }
         @keyframes t { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
 
-        .cont { padding: 15px; padding-bottom: 140px; }
+        .cont { padding: 12px; padding-bottom: 140px; }
         
-        /* LOGO BOX - AQUI MANTEMOS O logo.png ORIGINAL NO TOPO DO SITE */
-        .logo-box { width: 100%; height: 160px; border-radius: 20px; display: flex; align-items: center; justify-content: center; background: #000; border: 2px solid rgba(255,255,255,0.1); margin-bottom: 20px; position: relative; overflow: hidden; }
-        .logo-box img { max-width: 85%; max-height: 130px; z-index: 2; }
+        .logo-box { width: 100%; height: 140px; border-radius: 20px; display: flex; align-items: center; justify-content: center; background: #000; border: 2px solid rgba(255,255,255,0.1); margin-bottom: 15px; position: relative; overflow: hidden; }
+        .logo-box img { max-width: 80%; max-height: 110px; z-index: 2; }
         
-        /* SINO DE NOTIFICAÇÕES */
-        .sub-bell { position: absolute; top: 15px; right: 15px; width: 45px; height: 45px; background: rgba(255,204,0,0.1); border: 1px solid var(--y); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; animation: pulse-sub 2s infinite; z-index: 10; font-size: 20px; }
+        .sub-bell { position: absolute; top: 12px; right: 12px; width: 40px; height: 40px; background: rgba(255,204,0,0.1); border: 1px solid var(--y); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; animation: pulse-sub 2s infinite; z-index: 10; font-size: 18px; }
         @keyframes pulse-sub { 0% { box-shadow: 0 0 0 0 rgba(255,204,0,0.4); } 70% { box-shadow: 0 0 0 10px rgba(255,204,0,0); } 100% { box-shadow: 0 0 0 0 rgba(255,204,0,0); } }
 
-        .btn-radar { background: linear-gradient(135deg, #0066ff, #00d4ff); color: #fff; text-decoration: none; padding: 18px; border-radius: 15px; display: block; margin-bottom: 15px; font-weight: 900; text-align: center; font-size: 1.1rem; border: none; box-shadow: 0 4px 15px rgba(0,102,255,0.4); text-transform: uppercase; }
+        .btn-radar { background: linear-gradient(135deg, #0066ff, #00d4ff); color: #fff; text-decoration: none; padding: 15px; border-radius: 12px; display: block; margin-bottom: 12px; font-weight: 900; text-align: center; font-size: 0.95rem; border: none; box-shadow: 0 4px 15px rgba(0,102,255,0.4); text-transform: uppercase; }
 
-        .dash { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 15px; }
-        .box { background: var(--c); border-radius: 15px; padding: 15px; border: 1px solid rgba(255,255,255,0.1); text-align: center; }
-        .v { font-size: 1.6rem; font-weight: 900; font-family: monospace; }
-        .lbl { font-size: 0.65rem; color: #aaa; font-weight: 800; text-transform: uppercase; margin-top: 5px; }
+        .dash { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+        .box { background: var(--c); border-radius: 12px; padding: 12px; border: 1px solid rgba(255,255,255,0.1); text-align: center; }
+        .v { font-size: 1.4rem; font-weight: 900; font-family: monospace; }
+        .lbl { font-size: 0.6rem; color: #aaa; font-weight: 800; text-transform: uppercase; margin-top: 3px; }
 
-        .contactos { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
-        .btn-c { background: #1a1a1a; color: var(--y); text-decoration: none; padding: 12px; border-radius: 12px; text-align: center; border: 1px solid #333; font-weight: 900; }
+        .contactos { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+        .btn-c { background: #1a1a1a; color: var(--y); text-decoration: none; padding: 10px; border-radius: 10px; text-align: center; border: 1px solid #333; font-weight: 900; font-size: 0.8rem; }
         
-        .btn-e { background: var(--f); color: #fff; text-decoration: none; padding: 18px; border-radius: 15px; display: block; margin-bottom: 20px; font-weight: 900; text-align: center; font-size: 1.2rem; text-transform: uppercase; animation: p-red 2s infinite; }
+        .btn-e { background: var(--f); color: #fff; text-decoration: none; padding: 15px; border-radius: 12px; display: block; margin-bottom: 15px; font-weight: 900; text-align: center; font-size: 1.1rem; text-transform: uppercase; animation: p-red 2s infinite; }
         @keyframes p-red { 0% { box-shadow: 0 0 0 0 rgba(255,26,26,0.6); } 70% { box-shadow: 0 0 0 15px rgba(255,26,26,0); } 100% { box-shadow: 0 0 0 0 rgba(255,26,26,0); } }
 
-        /* CARDS COM GLOW PULSANTE LENTO DA V14 */
-        .card { background: var(--c); border-radius: 18px; padding: 20px; margin-bottom: 15px; border-left: 6px solid #444; position: relative; }
+        /* CARDS COM LETRA ALTERADA (MAIS PEQUENA) */
+        .card { background: var(--c); border-radius: 15px; padding: 15px; margin-bottom: 10px; border-left: 5px solid #444; position: relative; }
         .txt-acidente { border-left-color: var(--f); color: var(--f); animation: glow-f 3s ease-in-out infinite; }
         .txt-avaria { border-left-color: var(--y); color: var(--y); animation: glow-y 3s ease-in-out infinite; }
         .txt-info { border-left-color: var(--g); color: var(--g); animation: glow-g 3s ease-in-out infinite; }
 
-        @keyframes glow-f { 0%, 100% { box-shadow: 0 0 5px rgba(255, 77, 77, 0.1); } 50% { box-shadow: 0 0 25px rgba(255, 77, 77, 0.5); } }
-        @keyframes glow-y { 0%, 100% { box-shadow: 0 0 5px rgba(255, 204, 0, 0.1); } 50% { box-shadow: 0 0 25px rgba(255, 204, 0, 0.5); } }
-        @keyframes glow-g { 0%, 100% { box-shadow: 0 0 5px rgba(0, 255, 136, 0.1); } 50% { box-shadow: 0 0 25px rgba(0, 255, 136, 0.4); } }
+        @keyframes glow-f { 0%, 100% { box-shadow: 0 0 5px rgba(255, 77, 77, 0.1); } 50% { box-shadow: 0 0 20px rgba(255, 77, 77, 0.4); } }
+        @keyframes glow-y { 0%, 100% { box-shadow: 0 0 5px rgba(255, 204, 0, 0.1); } 50% { box-shadow: 0 0 20px rgba(255, 204, 0, 0.4); } }
+        @keyframes glow-g { 0%, 100% { box-shadow: 0 0 5px rgba(0, 255, 136, 0.1); } 50% { box-shadow: 0 0 20px rgba(0, 255, 136, 0.3); } }
 
-        .h { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px; }
-        .time { font-size: 1.4rem; font-weight: 900; color: #fff; }
-        .type-tag { font-size: 0.75rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; }
-        .loc-row { color: #888; font-size: 0.85rem; font-weight: 800; margin-bottom: 10px; text-transform: uppercase; display: block; }
-        .msg { font-weight: 700; font-size: 0.95rem; line-height: 1.5; word-wrap: break-word; text-transform: uppercase; }
+        .h { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 6px; }
+        .time { font-size: 1.1rem; font-weight: 900; color: #fff; } /* Letra reduzida de 1.4rem para 1.1rem */
+        .type-tag { font-size: 0.65rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; } /* Reduzido de 0.75rem */
+        .loc-row { color: #888; font-size: 0.75rem; font-weight: 800; margin-bottom: 6px; text-transform: uppercase; display: block; } /* Reduzido de 0.85rem */
+        .msg { font-weight: 700; font-size: 0.85rem; line-height: 1.4; word-wrap: break-word; text-transform: uppercase; } /* Reduzido de 0.95rem */
 
-        .nav { position: fixed; bottom: 0; left: 0; right: 0; background: #000; display: flex; gap: 10px; padding: 15px; border-top: 2px solid var(--f); z-index: 3000; }
-        .nav a { flex: 1; text-align: center; padding: 15px; border-radius: 12px; text-decoration: none; font-weight: 900; color: #fff; font-size: 0.8rem; text-transform: uppercase; }
+        .nav { position: fixed; bottom: 0; left: 0; right: 0; background: #000; display: flex; gap: 8px; padding: 12px; border-top: 2px solid var(--f); z-index: 3000; }
+        .nav a { flex: 1; text-align: center; padding: 12px; border-radius: 10px; text-decoration: none; font-weight: 900; color: #fff; font-size: 0.75rem; text-transform: uppercase; }
     </style>
 </head>
 <body>
     <div class="prog"></div>
-    <div class="t-wrap"><div class="t" id="ticker">SINCRONIZANDO CENTRAL DE EMERGÊNCIA RAM...</div></div>
+    <div class="t-wrap"><div class="t" id="ticker">SINCRONIZANDO CENTRAL...</div></div>
     
     <div class="cont">
         <div class="logo-box">
@@ -78,19 +75,19 @@
             <img src="logo.png" alt="RAM ALERTA">
         </div>
         
-        <a href="https://www.vialitoral.com/map" target="_blank" class="btn-radar">📡 MONITOR RADAR (VIALITORAL)</a>
+        <a href="https://www.vialitoral.com/map" target="_blank" class="btn-radar">📡 MONITOR RADAR</a>
         
         <div class="dash">
-            <div class="box"><div class="v" id="clock">00:00:00</div><div class="lbl">HORA ACTUAL</div></div>
+            <div class="box"><div class="v" id="clock">00:00:00</div><div class="lbl">HORA</div></div>
             <div class="box"><div class="v" id="w" style="color:var(--i)">--°C</div><div class="lbl" id="rn">MADEIRA</div></div>
         </div>
         
         <div class="contactos">
-            <a href="tel:800205215" class="btn-c"><span>800 205 215</span><small>VIALITORAL</small></a>
-            <a href="tel:800241241" class="btn-c"><span>800 241 241</span><small>VIAEXPRESSO</small></a>
+            <a href="tel:800205215" class="btn-c">800 205 215</a>
+            <a href="tel:800241241" class="btn-c">800 241 241</a>
         </div>
         
-        <a href="tel:112" class="btn-e">🚑 112 EMERGÊNCIA</a>
+        <a href="tel:112" class="btn-e">🚑 112</a>
         
         <div id="feed"></div>
     </div>
@@ -101,14 +98,8 @@
     </div>
 
     <script>
-        // REGISTO DO SERVICE WORKER PARA INSTALAÇÃO PWA
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js')
-            .then(() => console.log("PWA Ativo"))
-            .catch(err => console.log("Erro PWA", err));
-        }
+        if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js'); }
 
-        // CÓDIGO ORIGINAL DA V14 INTACTO
         let lastAlertId = "";
         function upClock() { document.getElementById('clock').innerText = new Date().toLocaleTimeString('pt-PT', {hour12:false}); }
         setInterval(upClock, 1000); upClock();
@@ -117,7 +108,7 @@
             Notification.requestPermission().then(perm => {
                 if(perm === 'granted') {
                     document.getElementById('bell').style.background = 'var(--g)';
-                    new Notification("RAM ALERTA", { body: "Subscrição confirmada!", icon: "Icon.png" });
+                    new Notification("RAM ALERTA", { body: "Notificações ligadas!", icon: "Icon.png" });
                 }
             });
         }

@@ -3,306 +3,132 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>RAM ALERTA - CENTRAL TÁTICA</title>
-    
+    <title>RAM ALERTA - CENTRAL ULTRA</title>
     <link rel="icon" type="image/png" href="icon.png">
-    <link rel="apple-touch-icon" href="icon.png">
-
     <style>
-        /* PALETA DE CORES TÁTICA E NEON */
-        :root { 
-            --fire: #ff1a1a; 
-            --bg: #050505; 
-            --card: rgba(20, 20, 22, 0.85); 
-            --info: #00e5ff; 
-            --yellow: #ffcc00; 
-            --glass-border: rgba(255, 255, 255, 0.08);
-        }
+        :root { --f: #ff1a1a; --y: #ffcc00; --b: #050505; --c: rgba(25,25,27,0.98); --i: #00e5ff; }
+        body { font-family: -apple-system, system-ui, sans-serif; background: var(--b); color: #fff; margin: 0; padding: 0; background: radial-gradient(circle at 50% 0%, #2a0000 0%, #050505 70%) fixed; }
         
-        body { 
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
-            background: var(--bg); 
-            color: #ffffff; 
-            margin: 0; 
-            padding: 0; 
-            overflow-x: hidden;
-            /* Fundo radial sutil para profundidade */
-            background-image: radial-gradient(circle at 50% 0%, #2a0000 0%, #050505 60%);
-            background-attachment: fixed;
-        }
-
-        /* 1. BARRA DE CARREGAMENTO (TOPO) */
-        .refresh-bar { 
-            position: fixed; top: 0; left: 0; height: 3px; 
-            background: linear-gradient(90deg, transparent, var(--fire), var(--yellow), transparent); 
-            background-size: 200% 100%;
-            z-index: 4000; 
-            animation: loading-bar 20s linear infinite; 
-            box-shadow: 0 0 10px var(--fire); 
-        }
-        @keyframes loading-bar { 0% { width: 0%; background-position: 100% 0; } 100% { width: 100%; background-position: -100% 0; } }
-
-        /* 2. TICKER DE INFORMAÇÃO ROLANTE */
-        .ticker-wrap { 
-            position: sticky; top: 0; width: 100%; overflow: hidden; 
-            background: rgba(5, 5, 5, 0.85); 
-            border-bottom: 1px solid var(--fire); 
-            z-index: 3000; 
-            backdrop-filter: blur(12px); 
-            -webkit-backdrop-filter: blur(12px);
-        }
-        .ticker { display: flex; white-space: nowrap; padding: 10px 0; animation: ticker 25s linear infinite; }
-        .ticker-item { padding: 0 30px; color: #fff; font-weight: 800; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 1px; }
-        @keyframes ticker { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
-
-        .container { padding: 15px; padding-bottom: 140px; }
-
-        /* 3. CAIXA DO LOGÓTIPO COM SINO (SUBSCRITORES) */
-        .identity-box {
-            width: 100%; height: 180px; border-radius: 20px; 
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            background: rgba(10, 10, 10, 0.6); 
-            border: 1px solid var(--glass-border); 
-            box-shadow: 0 8px 32px rgba(255, 0, 0, 0.15);
-            margin-bottom: 15px; position: relative; overflow: hidden;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-        }
-        .identity-box::before {
-            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
-            background: conic-gradient(transparent, rgba(255,26,26,0.1), transparent 30%);
-            animation: rotate-glow 6s linear infinite;
-        }
-        @keyframes rotate-glow { 100% { transform: rotate(360deg); } }
+        /* BARRA DE CARREGAMENTO DINÂMICA */
+        .prog { position: fixed; top: 0; height: 3px; background: linear-gradient(90deg, var(--f), var(--y)); z-index: 4000; animation: l 20s linear infinite; }
+        @keyframes l { 0% { width: 0; } 100% { width: 100%; } }
         
-        .group-logo { max-width: 85%; max-height: 130px; object-fit: contain; z-index: 2; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5)); transition: transform 0.3s ease; }
-        .identity-box:active .group-logo { transform: scale(0.95); }
+        /* TICKER SUPERIOR */
+        .t-wrap { position: sticky; top: 0; overflow: hidden; background: rgba(0,0,0,0.9); border-bottom: 1px solid var(--f); z-index: 3000; backdrop-filter: blur(10px); }
+        .t { display: flex; white-space: nowrap; padding: 12px 0; animation: t 30s linear infinite; font-weight: 800; font-size: 0.8rem; text-transform: uppercase; }
+        @keyframes t { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
 
-        .sub-btn {
-            position: absolute; top: 12px; right: 12px;
-            background: rgba(255, 204, 0, 0.15); border: 1px solid rgba(255, 204, 0, 0.4);
-            color: var(--yellow); padding: 10px; border-radius: 50%;
-            cursor: pointer; z-index: 10; 
-            animation: smooth-ring 3s infinite ease-in-out;
-            text-decoration: none; font-size: 1.2rem;
-            box-shadow: 0 0 15px rgba(255, 204, 0, 0.2);
-        }
-        @keyframes smooth-ring { 0%, 100% { transform: rotate(0); } 5%, 15% { transform: rotate(10deg); } 10%, 20% { transform: rotate(-10deg); } 25% { transform: rotate(0); } }
-
-        /* 4. DASHBOARD (MÉTRICAS) */
-        .dashboard { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 15px; }
-        .dash-box { 
-            background: var(--card); border-radius: 16px; padding: 15px; 
-            border: 1px solid var(--glass-border); text-align: center; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-        }
-        .clock { font-size: 1.6rem; font-weight: 900; letter-spacing: 1px; }
-        .weather-val { font-size: 1.4rem; font-weight: 900; color: var(--info); text-shadow: 0 0 10px rgba(0, 229, 255, 0.3); }
-        .dash-label { font-size: 0.6rem; color: #888; text-transform: uppercase; font-weight: 800; margin-top: 4px; letter-spacing: 1px;}
-
-        /* 5. BOTÕES DE ACESSO RÁPIDO */
-        .btn-link { 
-            background: var(--card); color: #fff; text-decoration: none; padding: 16px; 
-            border-radius: 16px; display: block; margin-bottom: 12px; 
-            border: 1px solid var(--glass-border); font-weight: 800; text-align: center; 
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); 
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            font-size: 0.9rem; letter-spacing: 0.5px;
-        }
-        .btn-link:active { transform: scale(0.97); background: rgba(40, 40, 45, 0.9); }
+        .cont { padding: 15px; padding-bottom: 120px; }
         
-        .btn-radar { 
-            background: linear-gradient(135deg, #0033cc, #00bfff); border: none; 
-            text-transform: uppercase; box-shadow: 0 4px 15px rgba(0, 191, 255, 0.3);
-        }
-        
-        .btn-112 { 
-            background: linear-gradient(135deg, #cc0000, #ff1a1a); border: none; 
-            font-size: 1.2rem; text-transform: uppercase; letter-spacing: 1px;
-            animation: soft-pulse 2s infinite; color: white;
-        }
-        @keyframes soft-pulse { 0% { box-shadow: 0 0 0 0 rgba(255, 26, 26, 0.5); } 70% { box-shadow: 0 0 0 12px rgba(255, 26, 26, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 26, 26, 0); } }
+        /* LOGO BOX - DINAMISMO VISUAL */
+        .logo-box { width: 100%; height: 160px; border-radius: 20px; display: flex; align-items: center; justify-content: center; background: #000; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 15px; box-shadow: 0 0 20px rgba(255,0,0,0.2); position: relative; overflow: hidden; }
+        .logo-box img { max-width: 80%; max-height: 120px; z-index: 2; transition: 0.3s; }
+        .logo-box:active img { transform: scale(0.95); }
 
-        /* CONTACTOS VIA LITORAL/EXPRESSO (Fundo Escuro, Letras Amarelas) */
-        .btn-yellow-text { 
-            color: var(--yellow) !important; 
-            text-shadow: 0 0 8px rgba(255, 204, 0, 0.4); 
-            font-size: 0.85rem; 
-        }
+        /* DASHBOARD METEO E HORA */
+        .dash { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
+        .box { background: var(--c); border-radius: 15px; padding: 15px; border: 1px solid rgba(255,255,255,0.1); text-align: center; backdrop-filter: blur(5px); }
+        .v { font-size: 1.5rem; font-weight: 900; }
+        .lbl { font-size: 0.6rem; color: var(--f); font-weight: 800; text-transform: uppercase; margin-top: 4px; letter-spacing: 1px; }
 
-        /* 6. CARTÕES DE ALERTA DINÂMICOS */
-        .alert-card { 
-            background: var(--card); border-radius: 16px; padding: 16px; margin-bottom: 12px; 
-            border-left: 5px solid var(--fire); 
-            animation: slideUp 0.4s ease-out forwards;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-            backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-            opacity: 0; transform: translateY(15px);
-        }
-        @keyframes slideUp { to { opacity: 1; transform: translateY(0); } }
-        
-        .alert-meta { font-size: 0.75rem; color: #aaa; margin-bottom: 6px; font-weight: 800; display: flex; align-items: center; gap: 5px; }
-        .alert-msg { font-weight: 800; color: #f0f0f0; text-transform: uppercase; font-size: 0.9rem; line-height: 1.4; }
-        
-        /* Efeito visual para acidentes */
-        .danger { border-left-color: var(--yellow); background: linear-gradient(90deg, rgba(255,204,0,0.08) 0%, rgba(20,20,22,0.85) 50%); }
+        /* BOTÕES TÁTICOS */
+        .btn { background: var(--c); color: #fff; text-decoration: none; padding: 15px; border-radius: 15px; display: block; margin-bottom: 10px; border: 1px solid rgba(255,255,255,0.1); font-weight: 800; text-align: center; transition: 0.2s; }
+        .btn-r { background: linear-gradient(135deg, #0044ff, #00d4ff); border: none; box-shadow: 0 4px 15px rgba(0, 191, 255, 0.3); }
+        .btn-e { background: var(--f); border: none; animation: p 2s infinite; font-size: 1.1rem; }
+        @keyframes p { 0% { box-shadow: 0 0 0 0 rgba(255,0,0,0.5); } 70% { box-shadow: 0 0 0 12px rgba(255,0,0,0); } 100% { box-shadow: 0 0 0 0 rgba(255,0,0,0); } }
 
-        /* 7. BARRA DE NAVEGAÇÃO INFERIOR */
-        .bottom-nav { 
-            position: fixed; bottom: 0; left: 0; right: 0; 
-            background: rgba(10, 10, 10, 0.95); display: flex; gap: 10px; padding: 15px; 
-            border-top: 1px solid var(--glass-border); z-index: 3000; 
-            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-            box-shadow: 0 -5px 20px rgba(0,0,0,0.5);
-        }
-        .nav-item { 
-            flex: 1; text-align: center; padding: 12px; border-radius: 12px; 
-            text-decoration: none; font-weight: 800; color: white; font-size: 0.75rem; 
-            text-transform: uppercase; transition: transform 0.2s;
-        }
-        .nav-item:active { transform: scale(0.95); }
+        /* FEED DE ALERTAS - CORREÇÃO DE LEITURA */
+        .card { background: var(--c); border-radius: 16px; padding: 18px; margin-bottom: 12px; border-left: 6px solid var(--f); box-shadow: 0 5px 15px rgba(0,0,0,0.3); animation: slide 0.4s ease-out; }
+        @keyframes slide { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .h { display: flex; justify-content: space-between; align-items: center; font-weight: 800; font-size: 0.75rem; color: #aaa; margin-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px; }
+        .time { color: var(--y); font-size: 1.1rem; font-weight: 900; }
+        .msg { font-weight: 700; font-size: 1rem; line-height: 1.5; color: #fff; word-wrap: break-word; text-transform: uppercase; }
+        .danger { border-left-color: var(--y); background: linear-gradient(90deg, rgba(255,204,0,0.08), transparent); }
+
+        /* NAV INFERIOR */
+        .nav { position: fixed; bottom: 0; left: 0; right: 0; background: #000; display: flex; gap: 8px; padding: 12px; border-top: 1px solid var(--f); z-index: 3000; }
+        .nav a { flex: 1; text-align: center; padding: 12px; border-radius: 10px; text-decoration: none; font-weight: 800; color: #fff; font-size: 0.7rem; }
     </style>
 </head>
 <body>
-    <div class="refresh-bar"></div>
-    
-    <div class="ticker-wrap">
-        <div class="ticker" id="ticker-content">A SINCRONIZAR REDE DE ALERTAS RAM...</div>
+    <div class="prog"></div>
+    <div class="t-wrap"><div class="t" id="ticker">A SINCRONIZAR CENTRAL RAM...</div></div>
+
+    <div class="cont">
+        <div class="logo-box"><img src="logo.png" alt="RAM ALERTA"></div>
+        
+        <a href="https://www.vialitoral.com/map" target="_blank" class="btn btn-r">📡 MONITOR RADAR (VIALITORAL)</a>
+
+        <div class="dash">
+            <div class="box"><div class="v" id="clock">00:00:00</div><div class="lbl">HORA ACTUAL</div></div>
+            <div class="box"><div class="v" id="w" style="color:var(--i)">--°C</div><div class="lbl" id="rn">MADEIRA</div></div>
+        </div>
+
+        <div style="display:flex; gap:10px; margin-bottom:10px">
+            <a href="tel:800205215" class="btn" style="flex:1; color:var(--y)">800 205 215<br><small style="color:#888">VIALITORAL</small></a>
+            <a href="tel:800241241" class="btn" style="flex:1; color:var(--y)">800 241 241<br><small style="color:#888">VIAEXPRESSO</small></a>
+        </div>
+
+        <a href="tel:112" class="btn btn-e">🚑 112 EMERGÊNCIA</a>
+        <div id="feed" style="margin-top:10px"></div>
     </div>
 
-    <div class="container">
-        
-        <div class="identity-box">
-            <a href="#" onclick="alert('Notificações ativadas com sucesso!')" class="sub-btn" title="Subscrever Alertas">🔔</a>
-            <img src="logo.png" alt="Logótipo RAM Alerta" class="group-logo" onerror="this.src='https://via.placeholder.com/300x120/111/ff1a1a?text=RAM+ALERTA'">
-        </div>
-
-        <a href="https://www.vialitoral.com/map" target="_blank" class="btn-link btn-radar">📡 MONITOR RADAR (VIALITORAL)</a>
-
-        <div class="dashboard">
-            <div class="dash-box">
-                <div class="clock" id="clock">00:00:00</div>
-                <div class="dash-label" style="color:var(--fire);">HORA LOCAL (24H)</div>
-            </div>
-            <div class="dash-box">
-                <div id="weather-info" class="weather-val">--°C</div>
-                <div id="rain-info" class="dash-label">A CARREGAR...</div>
-            </div>
-        </div>
-
-        <div style="display: flex; gap: 12px; margin-bottom: 12px;">
-            <a href="tel:800205215" class="btn-link btn-yellow-text" style="flex:1;">800 205 215<br><span style="font-size:0.65rem; color:#888;">VIA LITORAL</span></a>
-            <a href="tel:800241241" class="btn-link btn-yellow-text" style="flex:1;">800 241 241<br><span style="font-size:0.65rem; color:#888;">VIA EXPRESSO</span></a>
-        </div>
-
-        <a href="tel:112" class="btn-link btn-112">🚑 112 EMERGÊNCIA</a>
-        
-        <div id="feed" style="margin-top: 20px; text-align: center; color: #888; font-weight: bold; font-size: 0.9rem;">
-            A procurar ocorrências...
-        </div>
-    </div>
-
-    <div class="bottom-nav">
-        <a href="https://www.facebook.com/share/g/1ATEH8rvEb/" class="nav-item" style="background: linear-gradient(135deg, #1877F2, #0b59c7);">FACEBOOK</a>
-        <a href="https://t.me/acidenteseocorrenciasnaram" class="nav-item" style="background: linear-gradient(135deg, #0088cc, #006699);">TELEGRAM</a>
+    <div class="nav">
+        <a href="https://www.facebook.com/share/g/1ATEH8rvEb/" style="background:#1877F2">FB GRUPO</a>
+        <a href="https://t.me/acidenteseocorrenciasnaram" style="background:#0088cc">TELEGRAM</a>
     </div>
 
     <script>
-        // 1. MOTOR DE RELÓGIO (Formato 24 Horas Estrito)
-        function updateClock() { 
-            const now = new Date();
-            document.getElementById('clock').innerText = now.toLocaleTimeString('pt-PT', {hour12: false}); 
-        }
-        setInterval(updateClock, 1000); 
-        updateClock();
+        // Relógio 24h rigoroso
+        function upClock() { document.getElementById('clock').innerText = new Date().toLocaleTimeString('pt-PT', {hour12:false}); }
+        setInterval(upClock, 1000); upClock();
 
-        // 2. MOTOR METEOROLÓGICO (Com prevenção de falhas)
-        async function checkWeather() {
-            const tempEl = document.getElementById('weather-info');
-            const rainEl = document.getElementById('rain-info');
+        // Meteorologia resiliente
+        async function getW() {
             try {
-                // Fetch focado no Funchal com parâmetros estritos
-                const res = await fetch("https://api.open-meteo.com/v1/forecast?latitude=32.65&longitude=-16.90&current_weather=true&hourly=precipitation_probability&timezone=Europe%2FLisbon");
-                if (!res.ok) throw new Error("API Indisponível");
-                const data = await res.json();
-                
-                tempEl.innerText = `${Math.round(data.current_weather.temperature)}°C`;
-                rainEl.innerText = `${data.hourly.precipitation_probability[new Date().getHours()] || 0}% CHUVA`;
-            } catch (e) {
-                tempEl.innerText = "--°C";
-                rainEl.innerText = "S/ LIGAÇÃO";
-                // Tenta reconectar após 10 segundos em caso de falha de rede
-                setTimeout(checkWeather, 10000);
-            }
+                const r = await fetch("https://api.open-meteo.com/v1/forecast?latitude=32.65&longitude=-16.90&current_weather=true&hourly=precipitation_probability");
+                const d = await r.json();
+                document.getElementById('w').innerText = Math.round(d.current_weather.temperature)+"°C";
+                document.getElementById('rn').innerText = (d.hourly.precipitation_probability[new Date().getHours()] || 0)+"% CHUVA";
+            } catch(e) { document.getElementById('w').innerText = "N/A"; }
         }
 
-        // 3. MOTOR DE DADOS E ORDENAÇÃO (Excel)
-        async function fetchAlerts() {
+        // Motor de Alertas (Fix Horas e Texto)
+        async function getA() {
             try {
-                const res = await fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vQEfr4nu_M1gVlE2d2cUZdpgKwVgffuXMlNk5VSpxu9yJwVOCvnekQTwJ82BezSGTiMT0CCnXxkK_tI/pub?gid=0&single=true&output=csv&t=" + new Date().getTime());
-                const text = await res.text();
-                const lines = text.split(/\r?\n/).slice(1);
+                const r = await fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vQEfr4nu_M1gVlE2d2cUZdpgKwVgffuXMlNk5VSpxu9yJwVOCvnekQTwJ82BezSGTiMT0CCnXxkK_tI/pub?gid=0&single=true&output=csv&t="+Date.now());
+                const t = await r.text();
+                const lines = t.split(/\r?\n/).slice(1);
+                let html = ''; let tk = '';
                 
-                let alerts = []; 
-                let tickerHtml = "";
-                
-                lines.forEach(line => {
-                    // Regex robusto para separar CSV ignorando vírgulas dentro de aspas
-                    const cols = line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
-                    if(cols[2] && cols[2].trim() !== "") {
-                        let rawTime = (cols[0] || "").replace(/"/g, '').trim();
-                        let local = (cols[1] || "").replace(/"/g, '').trim();
-                        let msg = (cols[2] || "").replace(/"/g, '').trim();
+                // Processamento reverso para os mais recentes no topo
+                lines.reverse().forEach(l => {
+                    const c = l.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+                    if(c[2] && c[2].trim() !== "") {
+                        // Regex para capturar HH:MM na primeira coluna
+                        let tm = c[0].replace(/"/g,'').match(/(\d{1,2}:\d{2})/);
+                        let time = tm ? tm[0] : "INFO";
                         
-                        // Extração forçada de hora em formato HH:MM (24h)
-                        let timeMatch = rawTime.match(/\b([01]?[0-9]|2[0-3]):([0-5][0-9])\b/);
-                        let timeTxt = timeMatch ? timeMatch[0] : rawTime.substring(0,5);
+                        let loc = c[1] ? c[1].replace(/"/g,'').trim() : "MADEIRA";
+                        let msg = c[2] ? c[2].replace(/"/g,'').trim() : "";
                         
-                        // Criação de um valor matemático para ordenação perfeita
-                        let sortValue = 0;
-                        if(timeMatch) {
-                            sortValue = (parseInt(timeMatch[1]) * 60) + parseInt(timeMatch[2]);
-                        }
+                        let isD = msg.toUpperCase().includes("ACIDENTE") || msg.toUpperCase().includes("RETENÇÃO");
                         
-                        alerts.push({ time: timeTxt, local: local, msg: msg, sortValue: sortValue });
-                        tickerHtml += `<span class="ticker-item">⚠️ ${local}: ${msg}</span> `;
+                        html += `<div class="card ${isD?'danger':''}">
+                            <div class="h"><span class="time">🕒 ${time}</span><span>${loc}</span></div>
+                            <div class="msg">${msg}</div>
+                        </div>`;
+                        tk += ` ⚠️ ${loc}: ${msg} | `;
                     }
                 });
-
-                // Ordenação cronológica rigorosa: do mais recente (maior valor) para o mais antigo
-                alerts.sort((a,b) => b.sortValue - a.sortValue);
-                
-                let html = '';
-                alerts.slice(0, 15).forEach((a, index) => {
-                    const isDanger = a.msg.toUpperCase().includes("ACIDENTE") || a.msg.toUpperCase().includes("RETENÇÃO");
-                    // Animação em cascata (delay baseado no index)
-                    const delay = index * 0.1; 
-                    
-                    html += `
-                        <div class="alert-card ${isDanger ? 'danger' : ''}" style="animation-delay: ${delay}s">
-                            <div class="alert-meta">
-                                <span style="color:var(--yellow); font-size:0.9rem;">🕒</span> ${a.time} • ${a.local}
-                            </div>
-                            <div class="alert-msg">${a.msg}</div>
-                        </div>`;
-                });
-                
-                document.getElementById('feed').innerHTML = html || "VIA RÁPIDA SEM OCORRÊNCIAS REGISTADAS.";
-                if(tickerHtml) document.getElementById('ticker-content').innerHTML = tickerHtml;
-                
-            } catch (e) {
-                document.getElementById('feed').innerHTML = "Falha na sincronização. A tentar novamente...";
-            }
+                document.getElementById('feed').innerHTML = html || "<p style='text-align:center;color:#888'>Sem alertas no momento.</p>";
+                if(tk) document.getElementById('ticker').innerText = tk;
+            } catch(e) { document.getElementById('feed').innerHTML = "<p style='text-align:center;color:red'>Erro de sincronização...</p>"; }
         }
 
-        // Inicialização dos motores
-        checkWeather(); 
-        fetchAlerts(); 
-        
-        // Loops de atualização
-        setInterval(fetchAlerts, 20000); // Alertas a cada 20s
-        setInterval(checkWeather, 300000); // Meteorologia a cada 5 mins
+        getW(); getA(); 
+        setInterval(getA, 20000); // Atualiza alertas a cada 20s
+        setInterval(getW, 600000); // Atualiza clima a cada 10 min
     </script>
 </body>
 </html>

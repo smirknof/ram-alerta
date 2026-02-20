@@ -3,91 +3,116 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>RAM ALERTA - V9 SUBSCREVER</title>
+    <title>RAM ALERTA - CENTRAL TOTAL V10</title>
     <style>
-        :root { --f: #ff4d4d; --y: #ffcc00; --g: #00ff88; --b: #050505; --c: rgba(20,20,22,0.98); }
+        :root { --f: #ff4d4d; --y: #ffcc00; --g: #00ff88; --b: #050505; --c: rgba(20,20,22,0.98); --i: #00e5ff; }
         body { font-family: -apple-system, system-ui, sans-serif; background: var(--b); color: #fff; margin: 0; padding: 0; background: radial-gradient(circle at 50% 0%, #1a0000 0%, #050505 80%) fixed; }
         
-        /* BOTÃO DE SUBSCREVER FLUTUANTE */
-        .sub-btn { 
-            position: fixed; bottom: 85px; right: 20px; 
-            width: 55px; height: 55px; background: var(--y); 
-            border-radius: 50%; display: flex; align-items: center; 
-            justify-content: center; z-index: 5000; cursor: pointer;
-            box-shadow: 0 0 15px rgba(255,204,0,0.4);
-            animation: pulse-sub 2s infinite; border: none;
-        }
-        @keyframes pulse-sub {
-            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255,204,0,0.7); }
-            70% { transform: scale(1.1); box-shadow: 0 0 0 15px rgba(255,204,0,0); }
-            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255,204,0,0); }
-        }
-
+        /* BARRA DE PROGRESSO E TICKER */
         .prog { position: fixed; top: 0; height: 3px; background: linear-gradient(90deg, var(--f), var(--y)); z-index: 4000; animation: l 25s linear infinite; }
         @keyframes l { 0% { width: 0; } 100% { width: 100%; } }
-        
-        .t-wrap { position: sticky; top: 0; overflow: hidden; background: rgba(0,0,0,0.95); border-bottom: 1px solid rgba(255,255,255,0.1); z-index: 3000; backdrop-filter: blur(10px); }
-        .t { display: flex; white-space: nowrap; padding: 10px 0; animation: t 35s linear infinite; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; color: #ccc; }
+        .t-wrap { position: sticky; top: 0; overflow: hidden; background: rgba(0,0,0,0.95); border-bottom: 2px solid var(--f); z-index: 3000; backdrop-filter: blur(10px); }
+        .t { display: flex; white-space: nowrap; padding: 12px 0; animation: t 35s linear infinite; font-weight: 800; font-size: 0.8rem; text-transform: uppercase; color: #fff; }
         @keyframes t { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
 
-        .cont { padding: 15px; padding-bottom: 120px; }
-        .dash { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
-        .box { background: var(--c); border-radius: 12px; padding: 12px; border: 1px solid rgba(255,255,255,0.08); text-align: center; }
-        .v { font-size: 1.3rem; font-weight: 800; font-family: monospace; }
-        .lbl { font-size: 0.55rem; color: #888; font-weight: 700; text-transform: uppercase; margin-top: 4px; }
+        .cont { padding: 15px; padding-bottom: 140px; }
         
-        .btn-e { background: #cc0000; color: #fff; text-decoration: none; padding: 14px; border-radius: 12px; display: block; margin-bottom: 15px; font-weight: 800; text-align: center; font-size: 0.95rem; text-transform: uppercase; border: 1px solid rgba(255,255,255,0.1); }
+        /* LOGO BOX RESTAURADO */
+        .logo-box { width: 100%; height: 160px; border-radius: 20px; display: flex; align-items: center; justify-content: center; background: #000; border: 2px solid rgba(255,255,255,0.1); margin-bottom: 20px; position: relative; overflow: hidden; box-shadow: 0 0 25px rgba(255,0,0,0.2); }
+        .logo-box img { max-width: 85%; max-height: 130px; z-index: 2; }
+
+        /* ICON DE SUBSCREVER NO LOGO */
+        .sub-bell { position: absolute; top: 15px; right: 15px; width: 45px; height: 45px; background: rgba(255,204,0,0.2); border: 1px solid var(--y); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; animation: pulse-sub 2s infinite; z-index: 10; }
+        @keyframes pulse-sub { 0% { box-shadow: 0 0 0 0 rgba(255,204,0,0.4); } 70% { box-shadow: 0 0 0 10px rgba(255,204,0,0); } 100% { box-shadow: 0 0 0 0 rgba(255,204,0,0); } }
+
+        /* BOTÕES PRINCIPAIS */
+        .btn-radar { background: linear-gradient(135deg, #0066ff, #00d4ff); color: #fff; text-decoration: none; padding: 18px; border-radius: 15px; display: block; margin-bottom: 15px; font-weight: 900; text-align: center; font-size: 1.1rem; border: none; box-shadow: 0 4px 15px rgba(0,102,255,0.3); text-transform: uppercase; }
         
-        .card { background: var(--c); border-radius: 14px; padding: 15px; margin-bottom: 10px; border-left: 5px solid #444; }
+        .dash { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 15px; }
+        .box { background: var(--c); border-radius: 15px; padding: 15px; border: 1px solid rgba(255,255,255,0.1); text-align: center; }
+        .v { font-size: 1.6rem; font-weight: 900; font-family: 'Courier New', monospace; }
+        .lbl { font-size: 0.65rem; color: #aaa; font-weight: 800; text-transform: uppercase; margin-top: 5px; }
+
+        /* CONTACTOS CONCESSIONÁRIAS */
+        .contactos { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
+        .btn-c { background: #1a1a1a; color: var(--y); text-decoration: none; padding: 12px; border-radius: 12px; text-align: center; border: 1px solid #333; }
+        .btn-c span { display: block; font-size: 1.1rem; font-weight: 900; }
+        .btn-c small { font-size: 0.6rem; color: #777; font-weight: 800; }
+
+        .btn-e { background: var(--f); color: #fff; text-decoration: none; padding: 18px; border-radius: 15px; display: block; margin-bottom: 20px; font-weight: 900; text-align: center; font-size: 1.2rem; text-transform: uppercase; animation: p-red 2s infinite; }
+        @keyframes p-red { 0% { box-shadow: 0 0 0 0 rgba(255,26,26,0.6); } 70% { box-shadow: 0 0 0 15px rgba(255,26,26,0); } 100% { box-shadow: 0 0 0 0 rgba(255,26,26,0); } }
+
+        /* CARDS DINÂMICOS */
+        .card { background: var(--c); border-radius: 18px; padding: 20px; margin-bottom: 12px; border-left: 6px solid #444; position: relative; box-shadow: 0 6px 20px rgba(0,0,0,0.4); }
         .txt-acidente { border-left-color: var(--f); color: var(--f); }
         .txt-avaria { border-left-color: var(--y); color: var(--y); }
         .txt-info { border-left-color: var(--g); color: var(--g); }
 
-        .h { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 6px; }
-        .time { font-size: 1.1rem; font-weight: 800; color: #fff; }
-        .type-tag { font-size: 0.7rem; font-weight: 900; text-transform: uppercase; }
-        .loc-row { color: #888; font-size: 0.75rem; font-weight: 700; margin-bottom: 6px; text-transform: uppercase; display: block; }
-        .msg { font-weight: 600; font-size: 0.88rem; line-height: 1.4; word-wrap: break-word; text-transform: uppercase; }
+        .h { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px; }
+        .time { font-size: 1.4rem; font-weight: 900; color: #fff; display: flex; align-items: center; gap: 8px; }
+        .type-tag { font-size: 0.75rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; }
 
-        .nav { position: fixed; bottom: 0; left: 0; right: 0; background: #000; display: flex; gap: 8px; padding: 12px; border-top: 1px solid rgba(255,255,255,0.1); z-index: 3000; }
-        .nav a { flex: 1; text-align: center; padding: 12px; border-radius: 10px; text-decoration: none; font-weight: 800; color: #fff; font-size: 0.65rem; background: rgba(255,255,255,0.05); }
+        .loc-row { color: #888; font-size: 0.85rem; font-weight: 800; margin-bottom: 10px; text-transform: uppercase; display: block; }
+        .msg { font-weight: 700; font-size: 0.95rem; line-height: 1.5; word-wrap: break-word; text-transform: uppercase; }
+
+        /* NAVEGAÇÃO FINAL */
+        .nav { position: fixed; bottom: 0; left: 0; right: 0; background: #000; display: flex; gap: 10px; padding: 15px; border-top: 2px solid var(--f); z-index: 3000; }
+        .nav a { flex: 1; text-align: center; padding: 15px; border-radius: 12px; text-decoration: none; font-weight: 900; color: #fff; font-size: 0.8rem; text-transform: uppercase; }
     </style>
 </head>
 <body>
     <div class="prog"></div>
-    <div class="t-wrap"><div class="t" id="ticker">Sincronizando Sistema de Alerta...</div></div>
+    <div class="t-wrap"><div class="t" id="ticker">INICIALIZANDO CENTRAL DE EMERGÊNCIA RAM...</div></div>
     
-    <button class="sub-btn" id="bell" onclick="askPermission()">
-        <span style="font-size: 24px;">🔔</span>
-    </button>
-
     <div class="cont">
+        <div class="logo-box">
+            <button class="sub-bell" id="bell" onclick="askPermission()">🔔</button>
+            <img src="logo.png" alt="RAM ALERTA">
+        </div>
+
+        <a href="https://www.vialitoral.com/map" target="_blank" class="btn-radar">📡 MONITOR RADAR (VIALITORAL)</a>
+
         <div class="dash">
             <div class="box"><div class="v" id="clock">00:00:00</div><div class="lbl">HORA ACTUAL</div></div>
-            <div class="box"><div class="v" id="w" style="color:#00e5ff">--°C</div><div class="lbl" id="rn">MADEIRA</div></div>
+            <div class="box"><div class="v" id="w" style="color:var(--i)">--°C</div><div class="lbl" id="rn">MADEIRA</div></div>
         </div>
+
+        <div class="contactos">
+            <a href="tel:800205215" class="btn-c"><span>800 205 215</span><small>VIALITORAL</small></a>
+            <a href="tel:800241241" class="btn-c"><span>800 241 241</span><small>VIAEXPRESSO</small></a>
+        </div>
+
         <a href="tel:112" class="btn-e">🚑 112 EMERGÊNCIA</a>
+        
         <div id="feed"></div>
     </div>
 
     <div class="nav">
-        <a href="https://www.facebook.com/share/g/1ATEH8rvEb/">FACEBOOK</a>
-        <a href="https://t.me/acidenteseocorrenciasnaram">TELEGRAM</a>
+        <a href="https://www.facebook.com/share/g/1ATEH8rvEb/" style="background:#1877F2">FACEBOOK</a>
+        <a href="https://t.me/acidenteseocorrenciasnaram" style="background:#0088cc">TELEGRAM</a>
     </div>
 
     <script>
         let lastAlertId = "";
-
         function upClock() { document.getElementById('clock').innerText = new Date().toLocaleTimeString('pt-PT', {hour12:false}); }
-        setInterval(upClock, 1000);
+        setInterval(upClock, 1000); upClock();
 
         function askPermission() {
             Notification.requestPermission().then(perm => {
                 if(perm === 'granted') {
-                    document.getElementById('bell').style.display = 'none';
-                    new Notification("RAM ALERTA", { body: "Subscrição ativa!", icon: "logo.png" });
+                    document.getElementById('bell').style.background = 'var(--g)';
+                    new Notification("RAM ALERTA", { body: "Subscrição confirmada!", icon: "logo.png" });
                 }
             });
+        }
+
+        async function getW() {
+            try {
+                const r = await fetch("https://api.open-meteo.com/v1/forecast?latitude=32.65&longitude=-16.90&current_weather=true&hourly=precipitation_probability");
+                const d = await r.json();
+                document.getElementById('w').innerText = Math.round(d.current_weather.temperature)+"°C";
+                document.getElementById('rn').innerText = (d.hourly.precipitation_probability[new Date().getHours()] || 0)+"% CHUVA";
+            } catch(e) {}
         }
 
         async function getA() {
@@ -98,7 +123,7 @@
                 let html = ''; let tk = '';
                 
                 if(lines.length > 0) {
-                    const latest = lines[lines.length - 1].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+                    const latest = lines[lines.length - 1].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(s => s.replace(/"/g,'').trim());
                     const currentId = latest[2] + latest[3];
                     if (lastAlertId !== "" && lastAlertId !== currentId && Notification.permission === "granted") {
                         new Notification(`⚠️ ${latest[1]}`, { body: latest[2], icon: "logo.png" });
@@ -115,20 +140,25 @@
                         else if(tU.includes("AVARIA") || mU.includes("AVARIADO")) colorClass = "txt-avaria";
                         
                         html += `<div class="card ${colorClass}">
-                            <div class="h"><span class="time">🕒 ${c[3]||'--'}</span><span class="type-tag">${c[0]}</span></div>
+                            <div class="h">
+                                <span class="time">🕒 ${c[3]||'--:--'}</span>
+                                <span class="type-tag">${c[0]}</span>
+                            </div>
                             <span class="loc-row">📍 ${c[1]}</span>
                             <div class="msg">${c[2]}</div>
                         </div>`;
-                        tk += ` • ${c[1]}: ${c[2]} `;
+                        tk += ` 🚨 ${c[1]}: ${c[2]} | `;
                     }
                 });
                 document.getElementById('feed').innerHTML = html;
-                document.getElementById('ticker').innerText = tk;
+                document.getElementById('ticker').innerText = tk || "SEM OCORRÊNCIAS REGISTADAS";
             } catch(e) {}
         }
 
-        getA(); setInterval(getA, 20000);
-        if(Notification.permission === "granted") document.getElementById('bell').style.display = 'none';
+        getW(); getA(); 
+        setInterval(getA, 20000); 
+        setInterval(getW, 600000);
+        if(Notification.permission === "granted") document.getElementById('bell').style.background = 'var(--g)';
     </script>
 </body>
 </html>

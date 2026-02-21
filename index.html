@@ -16,25 +16,31 @@
     <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
     <script>
       window.OneSignalDeferred = window.OneSignalDeferred || [];
-      OneSignalDeferred.push(async function(OneSignal) {
-        await OneSignal.init({
+      OneSignalDeferred.push(function(OneSignal) {
+        OneSignal.init({
           appId: "3892797e-d00e-4365-8302-6022c0cf8498",
           notifyButton: {
             enable: true,
             size: 'medium',
             theme: 'default',
             position: 'bottom-right',
-            offset: { bottom: '100px', right: '15px' },
+            offset: { 
+                bottom: '85px', /* Ajustado para não sobrepor a navegação inferior */
+                right: '15px' 
+            },
             colors: {
               'circle.background': '#ffcc00',
-              'circle.foreground': 'black',
-              'badge.background': '#ff4d4d'
+              'circle.foreground': '#000000', /* Corrigido de 'black' para Hexadecimal */
+              'badge.background': '#ff4d4d',
+              'badge.foreground': '#ffffff',
+              'badge.bordercolor': '#000000'
             },
             text: {
-              'tip.state.unsubscribed': 'Subscrever Alertas',
-              'tip.state.subscribed': 'Alertas Ativos'
+              'tip.state.unsubscribed': 'Subscrever Alertas RAM',
+              'tip.state.subscribed': 'Alertas Ativos',
+              'tip.state.blocked': 'Alertas Bloqueados'
             }
-          },
+          }
         });
       });
     </script>
@@ -128,7 +134,6 @@
                 
                 if(rows.length > 0) {
                     let currentLast = rows[rows.length - 1];
-                    // Gatilho visual imediato para quando estás com o site aberto
                     if (lastAlertData !== "" && lastAlertData !== currentLast) {
                         let c = currentLast.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
                         if (Notification.permission === "granted") {
@@ -166,7 +171,7 @@
         }
 
         getW(); getA();
-        setInterval(getA, 10000); // 10 segundos para máxima precisão
+        setInterval(getA, 10000);
         setInterval(getW, 600000);
     </script>
 </body>

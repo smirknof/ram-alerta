@@ -14,33 +14,26 @@
     <link rel="apple-touch-icon" href="Icon.png">
 
     <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
-    <script>
-      window.OneSignalDeferred = window.OneSignalDeferred || [];
-      OneSignalDeferred.push(async function(OneSignal) {
-        await OneSignal.init({
-          appId: "3892797e-d00e-4365-8302-6022c0cf8498",
-          notifyButton: {
-            enable: true,
-            size: 'medium',
-            position: 'bottom-right',
-            offset: { bottom: '85px', right: '15px' }, // Sobe o sino para não tapar o menu
-            colors: {
-              'circle.background': '#ffcc00',
-              'circle.foreground': 'black',
-              'badge.background': '#ff4d4d',
-              'pulse.color': '#ffcc00'
-            },
-            text: {
-              'tip.state.unsubscribed': 'Subscrever Alertas',
-              'tip.state.subscribed': 'Notificações Activas',
-              'dialog.main.title': 'Configurar RAM ALERTA',
-              'dialog.main.button.subscribe': 'ACTIVAR',
-              'dialog.main.button.unsubscribe': 'DESACTIVAR'
-            }
-          },
-        });
-      });
-    </script>
+<script>
+  window.OneSignalDeferred = window.OneSignalDeferred || [];
+  OneSignalDeferred.push(async function(OneSignal) {
+    await OneSignal.init({
+      appId: "3892797e-d00e-4365-8302-6022c0cf8498",
+      notifyButton: {
+        enable: true, // ESTA É A LINHA QUE ATIVA O SINO
+        size: 'medium',
+        position: 'bottom-right',
+        offset: { bottom: '100px', right: '15px' },
+        colors: {
+            'circle.background': '#ffcc00',
+            'circle.foreground': 'black'
+        }
+      },
+    });
+  });
+</script>
+
+
 
     <style>
         :root { --f: #ff4d4d; --y: #ffcc00; --g: #00ff88; --b: #050505; --c: rgba(20,20,22,0.98); --i: #00e5ff; }

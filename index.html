@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>RAM ALERTA - CENTRAL TOTAL V11</title>
+    <title>RAM ALERTA - CENTRAL TOTAL V10</title>
     <style>
         :root {
             --f: #ff4d4d;
@@ -62,7 +62,7 @@
             padding-bottom: 140px;
         }
 
-        /* LOGO BOX - AGORA COM PLACEHOLDER */
+        /* LOGO BOX */
         .logo-box {
             width: 100%;
             height: 170px;
@@ -70,15 +70,12 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, var(--f), var(--i));
+            background: #000;
             border: 2px solid rgba(255,255,255,0.1);
             margin-bottom: 20px;
             position: relative;
             overflow: hidden;
             box-shadow: 0 0 25px rgba(255,0,0,0.25);
-            font-size: 3.5rem;
-            font-weight: 900;
-            text-shadow: 0 0 20px rgba(255,255,255,0.5);
         }
         .logo-box img {
             max-width: 85%;
@@ -209,33 +206,12 @@
             font-size: 1.2rem;
             text-transform: uppercase;
             animation: p-red 2s infinite;
-            position: relative;
         }
         @keyframes p-red {
             0% { box-shadow: 0 0 0 0 rgba(255,26,26,0.6); }
             70% { box-shadow: 0 0 0 15px rgba(255,26,26,0); }
             100% { box-shadow: 0 0 0 0 rgba(255,26,26,0); }
         }
-        .dist { font-size: 1rem; color: var(--y); margin-top: 8px; }
-        .loc { font-size: 0.75rem; color: #ccc; }
-
-        /* BARRA FINAL DE STATUS ALERTA */
-        .status-bar {
-            position: fixed;
-            bottom: 70px;
-            left: 15px;
-            right: 15px;
-            background: var(--c);
-            border-radius: 20px;
-            padding: 15px;
-            text-align: center;
-            border: 2px solid var(--g);
-            box-shadow: 0 10px 30px rgba(0,255,136,0.3);
-            font-weight: 900;
-            font-size: 1rem;
-            transition: all 0.5s;
-        }
-        .status-bar.alert { border-color: var(--f); background: rgba(255,77,77,0.2); box-shadow: 0 10px 30px rgba(255,77,77,0.4); }
 
         /* CARDS DINÂMICOS */
         .card {
@@ -346,30 +322,26 @@
     
     <div class="cont">
         <div class="logo-box">
-            RAM
             <button class="sub-bell" id="bell" type="button" onclick="askPermission()" aria-label="Ativar notificações de novas ocorrências">
                 🔔
             </button>
+            <img src="logo.png" alt="RAM ALERTA">
         </div>
 
         <h1 class="title">RAM ALERTA · VIAS E OCORRÊNCIAS</h1>
 
         <a href="https://www.vialitoral.com/map" target="_blank" class="btn-radar" rel="noopener noreferrer">
-            📡 Radars e Câmaras Viatura
+            📡 Monitor radar (Vialitoral)
         </a>
 
         <div class="dash">
             <div class="box" aria-live="polite">
-                <div class="v" id="horaAtual">03:02</div>
-                <div class="lbl">Hora</div>
+                <div class="v" id="clock">00:00:00</div>
+                <div class="lbl">Hora actual</div>
             </div>
             <div class="box" aria-live="polite">
-                <div class="v" id="temp1" style="color:var(--i)">14°C</div>
-                <div class="lbl">Funchal</div>
-            </div>
-            <div class="box" aria-live="polite">
-                <div class="v" id="temp2" style="color:var(--g)">14°C</div>
-                <div class="lbl">% Chuva</div>
+                <div class="v" id="w" style="color:var(--i)">--°C</div>
+                <div class="lbl" id="rn">Madeira</div>
             </div>
         </div>
 
@@ -386,18 +358,11 @@
         </div>
 
         <a href="tel:112" class="btn-e" aria-label="Ligar para o 112 emergência">
-            🚨 112 EMERGÊNCIA
-            <div class="dist" id="distancia">2.2M</div>
-            <div class="loc" id="localizacao">Entroque → Madeira</div>
+            🚑 112 Emergência
         </a>
         
         <p class="section-label">Ocorrências em tempo real</p>
         <div id="feed"></div>
-    </div>
-
-    <!-- BARRA DE STATUS ALERTA -->
-    <div class="status-bar" id="statusBar">
-        ✅ SEM ALERTA<br><small>Madeira SEM ALERta</small>
     </div>
 
     <div class="nav" aria-label="Redes sociais RAM Alerta">
@@ -411,97 +376,69 @@
 
     <script>
         let lastAlertId = "";
-        let userPos = null;
-        let hasAlert = false;
 
-        // Hora em tempo real (como na screenshot)
         function upClock() {
-            const agora = new Date();
-            const h = agora.getHours().toString().padStart(2,'0');
-            const m = agora.getMinutes().toString().padStart(2,'0');
-            document.getElementById('horaAtual').textContent = `${h}:${m}`;
+            document.getElementById('clock').innerText =
+                new Date().toLocaleTimeString('pt-PT', {hour12:false});
         }
-        setInterval(upClock, 60000); // A cada minuto
+        setInterval(upClock, 1000);
         upClock();
 
-        // Geolocalização para distância
-        navigator.geolocation.getCurrentPosition(pos => {
-            userPos = {lat: pos.coords.latitude, lng: pos.coords.longitude};
-            updateDist();
-        }, () => {
-            document.getElementById('distancia').textContent = 'GPS off';
-        });
-
-        function calcDist(lat1, lng1) {
-            if (!userPos) return 2.2;
-            const R = 6371; // km
-            const dLat = (lat1 - userPos.lat) * Math.PI / 180;
-            const dLng = (lng1 - userPos.lng) * Math.PI / 180;
-            const a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(userPos.lat * Math.PI / 180) * Math.cos(lat1 * Math.PI / 180) * Math.sin(dLng/2) * Math.sin(dLng/2);
-            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-            const km = R * c;
-            return (km * 1000).toFixed(0) + 'M'; // em metros
-        }
-
-        function updateDist(accidentLat=32.65, accidentLng=-16.90) { // Default Funchal
-            if (userPos) {
-                document.getElementById('distancia').textContent = calcDist(accidentLat, accidentLng);
-                document.getElementById('localizacao').textContent = 'Funchal → Madeira';
-            }
-        }
-
         function askPermission() {
-            if (!('Notification' in window)) return;
+            if (!('Notification' in window)) {
+                alert("O seu navegador não suporta notificações.");
+                return;
+            }
             Notification.requestPermission().then(perm => {
                 if(perm === 'granted') {
                     document.getElementById('bell').style.background = 'var(--g)';
-                    new Notification("RAM ALERTA", { body: "Subscrição confirmada!", icon: "logo.png" });
+                    new Notification("RAM ALERTA", {
+                        body: "Subscrição confirmada!",
+                        icon: "logo.png"
+                    });
                 }
-            });
+            }).catch(console.error);
         }
 
         async function getW() {
             try {
                 const r = await fetch("https://api.open-meteo.com/v1/forecast?latitude=32.65&longitude=-16.90&current_weather=true&hourly=precipitation_probability");
-                const d = await r.json();
-                document.getElementById('temp1').textContent = Math.round(d.current_weather.temperature) + '°C';
-                document.getElementById('temp2').textContent = (d.hourly.precipitation_probability[new Date().getHours()] || 0) + '%';
-            } catch(e) { console.error(e); }
+                const d = await r.json(); /* API Open‑Meteo current_weather/hourly. [web:58] */
+                document.getElementById('w').innerText = Math.round(d.current_weather.temperature)+"°C";
+                document.getElementById('rn').innerText =
+                    (d.hourly.precipitation_probability[new Date().getHours()] || 0)+"% chuva";
+            } catch(e) {
+                console.error(e);
+            }
         }
 
         async function getA() {
             try {
                 const r = await fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vQEfr4nu_M1gVlE2d2cUZdpgKwVgffuXMlNk5VSpxu9yJwVOCvnekQTwJ82BezSGTiMT0CCnXxkK_tI/pub?gid=0&single=true&output=csv&t="+Date.now());
-                const t = await r.text();
+                const t = await r.text(); /* CSV publicado via Google Sheets. [web:66] */
                 const lines = t.split(/
-/).slice(1).filter(l => l.trim());
-                let html = ''; let tk = ''; let alertActive = false;
-
+?
+/).slice(1).filter(l => l.trim() !== "");
+                let html = ''; let tk = '';
+                
                 if(lines.length > 0) {
-                    const latest = lines[lines.length - 1].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(s => s.replace(/"/g,'').trim());
+                    const latest = lines[lines.length - 1]
+                        .split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/)
+                        .map(s => s.replace(/"/g,'').trim());
                     const currentId = (latest[2] || "") + (latest[3] || "");
-                    if (lastAlertId !== "" && lastAlertId !== currentId && Notification.permission === "granted") {
-                        new Notification(`⚠️ ${latest[1]}`, { body: latest[2], icon: "logo.png" });
+                    if (lastAlertId !== "" && lastAlertId !== currentId && 'Notification' in window && Notification.permission === "granted") {
+                        new Notification(`⚠️ ${latest[1]}`, {
+                            body: latest[2],
+                            icon: "logo.png"
+                        });
                     }
                     lastAlertId = currentId;
-                    if (latest[0]?.toUpperCase().includes('ACIDENTE')) alertActive = true;
                 }
-
-                // Atualiza status alerta
-                const statusBar = document.getElementById('statusBar');
-                if (alertActive) {
-                    statusBar.textContent = '🚨 ALERTA ATIVO
-Madeira COM ALERta';
-                    statusBar.classList.add('alert');
-                } else {
-                    statusBar.textContent = '✅ SEM ALERTA
-Madeira SEM ALERta';
-                    statusBar.classList.remove('alert');
-                }
-                hasAlert = alertActive;
 
                 lines.reverse().forEach(l => {
-                    const c = l.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(s => s.replace(/"/g,'').trim());
+                    const c = l
+                        .split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/)
+                        .map(s => s.replace(/"/g,'').trim());
                     if(c.length >= 3) {
                         let colorClass = "txt-info";
                         let mU = c[2].toUpperCase(); let tU = c[0].toUpperCase();
@@ -520,15 +457,19 @@ Madeira SEM ALERta';
                     }
                 });
                 document.getElementById('feed').innerHTML = html;
-                document.getElementById('ticker').innerText = tk || "Sem ocorrências registadas neste momento.";
-            } catch(e) { console.error(e); }
+                document.getElementById('ticker').innerText =
+                    tk || "Sem ocorrências registadas neste momento.";
+            } catch(e) {
+                console.error(e);
+            }
         }
 
-        getW(); getA();
+        getW();
+        getA();
         setInterval(getA, 20000);
         setInterval(getW, 600000);
 
-        if(Notification.permission === "granted") {
+        if('Notification' in window && Notification.permission === "granted") {
             document.getElementById('bell').style.background = 'var(--g)';
         }
     </script>

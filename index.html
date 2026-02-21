@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>RAM ALERTA - V19 TOTAL</title>
+    <title>RAM ALERTA - V21 SUPREMA</title>
     
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#ff4d4d">
@@ -25,81 +25,86 @@
             padding: 0; 
             background: radial-gradient(circle at 50% 0%, #1a0000 0%, #050505 80%) fixed;
             overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        /* BARRA DE CARREGAMENTO */
-        .prog { position: fixed; top: 0; height: 3px; background: linear-gradient(90deg, var(--f), var(--y)); z-index: 4000; animation: l 25s linear infinite; }
+        /* BARRA DE PROGRESSO ANIMADA V19 */
+        .prog { position: fixed; top: 0; height: 3px; background: linear-gradient(90deg, var(--f), var(--y)); z-index: 5000; animation: l 25s linear infinite; }
         @keyframes l { 0% { width: 0; } 100% { width: 100%; } }
 
-        /* TICKER SUPERIOR */
-        .t-wrap { position: sticky; top: 0; overflow: hidden; background: rgba(0,0,0,0.95); border-bottom: 2px solid var(--f); z-index: 3000; backdrop-filter: blur(10px); }
-        .t { display: flex; white-space: nowrap; padding: 10px 0; animation: t 35s linear infinite; font-weight: 800; font-size: 0.75rem; text-transform: uppercase; color: #fff; }
+        /* TICKER SUPERIOR ROBUSTO V19 */
+        .t-wrap { position: sticky; top: 0; overflow: hidden; background: rgba(0,0,0,0.9); border-bottom: 2px solid var(--f); z-index: 4000; backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); }
+        .t { display: flex; white-space: nowrap; padding: 12px 0; animation: t 35s linear infinite; font-weight: 900; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; }
         @keyframes t { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
 
-        .cont { padding: 12px; padding-bottom: 140px; }
+        .cont { padding: 14px; padding-bottom: 150px; }
 
-        /* HEADER & LOGO */
+        /* LOGO BOX COM EFEITO DE PROFUNDIDADE V19 */
         .logo-box { 
-            width: 100%; height: 140px; border-radius: 20px; display: flex; align-items: center; justify-content: center; 
-            background: #000; border: 2px solid rgba(255,255,255,0.1); margin-bottom: 15px; position: relative; overflow: hidden; 
+            width: 100%; height: 145px; border-radius: 22px; display: flex; align-items: center; justify-content: center; 
+            background: #000; border: 1px solid rgba(255,255,255,0.15); margin-bottom: 15px; position: relative; overflow: hidden; 
+            box-shadow: 0 10px 40px rgba(0,0,0,0.8);
         }
-        .logo-box img { max-width: 80%; max-height: 110px; z-index: 2; }
+        .logo-box img { max-width: 85%; max-height: 115px; z-index: 2; filter: drop-shadow(0 0 10px rgba(255,255,255,0.1)); }
 
-        /* SINO DE NOTIFICAÇÕES */
+        /* SINO DE NOTIFICAÇÕES TÁCTICO V19 */
         .sub-bell { 
-            position: absolute; top: 12px; right: 12px; width: 40px; height: 40px; background: rgba(255,204,0,0.1); 
-            border: 1px solid var(--y); border-radius: 50%; display: flex; align-items: center; justify-content: center; 
-            cursor: pointer; animation: pulse-sub 2s infinite; z-index: 10; font-size: 18px; 
+            position: absolute; top: 12px; right: 12px; width: 45px; height: 45px; background: rgba(255,204,0,0.1); 
+            border: 2px solid var(--y); border-radius: 50%; display: flex; align-items: center; justify-content: center; 
+            cursor: pointer; animation: pulse-sub 2.5s infinite; z-index: 10; font-size: 22px; 
         }
-        @keyframes pulse-sub { 0% { box-shadow: 0 0 0 0 rgba(255,204,0,0.4); } 70% { box-shadow: 0 0 0 10px rgba(255,204,0,0); } 100% { box-shadow: 0 0 0 0 rgba(255,204,0,0); } }
+        @keyframes pulse-sub { 0% { box-shadow: 0 0 0 0 rgba(255,204,0,0.4); } 70% { box-shadow: 0 0 0 12px rgba(255,204,0,0); } 100% { box-shadow: 0 0 0 0 rgba(255,204,0,0); } }
 
-        /* BOTÃO RADAR */
+        /* BOTÃO RADAR VIALITORAL */
         .btn-radar { 
-            background: linear-gradient(135deg, #0066ff, #00d4ff); color: #fff; text-decoration: none; padding: 15px; 
-            border-radius: 12px; display: block; margin-bottom: 12px; font-weight: 900; text-align: center; font-size: 0.95rem; 
-            border: none; box-shadow: 0 4px 15px rgba(0,102,255,0.4); text-transform: uppercase; 
+            background: linear-gradient(135deg, #0066ff, #00d4ff); color: #fff; text-decoration: none; padding: 16px; 
+            border-radius: 14px; display: block; margin-bottom: 12px; font-weight: 900; text-align: center; font-size: 1rem; 
+            text-transform: uppercase; box-shadow: 0 5px 20px rgba(0,102,255,0.4); border: none;
         }
 
-        /* DASHBOARD (HORA E TEMPO) */
-        .dash { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
-        .box { background: var(--c); border-radius: 12px; padding: 12px; border: 1px solid rgba(255,255,255,0.1); text-align: center; }
-        .v { font-size: 1.4rem; font-weight: 900; font-family: monospace; }
-        .lbl { font-size: 0.6rem; color: #aaa; font-weight: 800; text-transform: uppercase; margin-top: 3px; }
+        /* DASHBOARD (HORA E METEO COM CHUVA) V19 */
+        .dash { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+        .box { background: var(--c); border-radius: 16px; padding: 15px; border: 1px solid rgba(255,255,255,0.1); text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        .v { font-size: 1.6rem; font-weight: 900; font-family: 'JetBrains Mono', monospace; }
+        .lbl { font-size: 0.65rem; color: #aaa; font-weight: 800; text-transform: uppercase; margin-top: 5px; }
 
-        /* CONTACTOS IDENTIFICADOS */
-        .contactos { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
-        .btn-c { background: #1a1a1a; color: var(--y); text-decoration: none; padding: 12px; border-radius: 10px; text-align: center; border: 1px solid #333; font-weight: 900; }
-        .btn-c small { display: block; color: #888; font-size: 0.55rem; text-transform: uppercase; margin-top: 2px; }
+        /* CONTACTOS IDENTIFICADOS (Vialitoral e Viaexpresso) */
+        .contactos { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+        .btn-c { background: #1a1a1a; color: var(--y); text-decoration: none; padding: 14px; border-radius: 14px; text-align: center; border: 1px solid #333; font-weight: 900; display: flex; flex-direction: column; justify-content: center; }
+        .btn-c span { font-size: 1.1rem; }
+        .btn-c small { display: block; color: #777; font-size: 0.55rem; text-transform: uppercase; margin-top: 4px; letter-spacing: 0.5px; }
 
-        /* EMERGÊNCIA 112 */
+        /* EMERGÊNCIA 112 V19 */
         .btn-e { 
-            background: var(--f); color: #fff; text-decoration: none; padding: 16px; border-radius: 12px; display: block; 
-            margin-bottom: 15px; font-weight: 900; text-align: center; font-size: 1.1rem; text-transform: uppercase; animation: p-red 2s infinite; 
+            background: var(--f); color: #fff; text-decoration: none; padding: 18px; border-radius: 14px; display: block; 
+            margin-bottom: 20px; font-weight: 900; text-align: center; font-size: 1.2rem; text-transform: uppercase; 
+            animation: p-red 2s infinite; border: none; box-shadow: 0 5px 25px rgba(255,77,77,0.4);
         }
-        @keyframes p-red { 0% { box-shadow: 0 0 0 0 rgba(255,26,26,0.6); } 70% { box-shadow: 0 0 0 15px rgba(255,26,26,0); } 100% { box-shadow: 0 0 0 0 rgba(255,26,26,0); } }
+        @keyframes p-red { 0% { box-shadow: 0 0 0 0 rgba(255,26,26,0.6); } 70% { box-shadow: 0 0 0 20px rgba(255,26,26,0); } 100% { box-shadow: 0 0 0 0 rgba(255,26,26,0); } }
 
-        /* CARDS DE ALERTA (ESTILO COMPACTO PEDIDO) */
-        .card { background: var(--c); border-radius: 15px; padding: 15px; margin-bottom: 10px; border-left: 5px solid #444; position: relative; }
-        .txt-acidente { border-left-color: var(--f); color: var(--f); animation: glow-f 3s ease-in-out infinite; }
-        .txt-avaria { border-left-color: var(--y); color: var(--y); animation: glow-y 3s ease-in-out infinite; }
-        .txt-info { border-left-color: var(--g); color: var(--g); animation: glow-g 3s ease-in-out infinite; }
+        /* ALERTA CARDS (ESTILO V19 COMPLETO + LETRA PEQUENA) */
+        .card { background: var(--c); border-radius: 18px; padding: 18px; margin-bottom: 12px; border-left: 6px solid #444; position: relative; box-shadow: 0 8px 20px rgba(0,0,0,0.4); }
+        .txt-acidente { border-left-color: var(--f); animation: glow-f 3s infinite; }
+        .txt-avaria { border-left-color: var(--y); }
+        .txt-info { border-left-color: var(--g); }
 
-        @keyframes glow-f { 0%, 100% { box-shadow: 0 0 5px rgba(255, 77, 77, 0.1); } 50% { box-shadow: 0 0 20px rgba(255, 77, 77, 0.4); } }
+        @keyframes glow-f { 0%, 100% { box-shadow: 0 0 5px rgba(255, 77, 77, 0.1); } 50% { box-shadow: 0 0 25px rgba(255, 77, 77, 0.4); } }
         
-        .h { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 6px; }
-        .time { font-size: 1.1rem; font-weight: 900; color: #fff; }
-        .type-tag { font-size: 0.65rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; }
-        .loc-row { color: #888; font-size: 0.75rem; font-weight: 800; margin-bottom: 6px; text-transform: uppercase; display: block; }
-        .msg { font-weight: 700; font-size: 0.85rem; line-height: 1.4; word-wrap: break-word; text-transform: uppercase; }
+        .h { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 8px; }
+        .time { font-size: 1.2rem; font-weight: 900; color: #fff; letter-spacing: -0.5px; }
+        .type-tag { font-size: 0.7rem; font-weight: 900; text-transform: uppercase; color: #aaa; letter-spacing: 1px; }
+        .loc-row { color: var(--i); font-size: 0.8rem; font-weight: 800; margin-bottom: 8px; text-transform: uppercase; display: block; }
+        .msg { font-weight: 700; font-size: 0.85rem; line-height: 1.5; text-transform: uppercase; color: #f0f0f0; }
 
-        /* NAVEGAÇÃO INFERIOR */
-        .nav { position: fixed; bottom: 0; left: 0; right: 0; background: #000; display: flex; gap: 8px; padding: 12px; border-top: 2px solid var(--f); z-index: 3000; }
-        .nav a { flex: 1; text-align: center; padding: 12px; border-radius: 10px; text-decoration: none; font-weight: 900; color: #fff; font-size: 0.75rem; text-transform: uppercase; }
+        /* NAV INFERIOR INTEGRAL V19 */
+        .nav { position: fixed; bottom: 0; left: 0; right: 0; background: #000; display: flex; gap: 10px; padding: 15px; border-top: 2px solid var(--f); z-index: 4000; }
+        .nav a { flex: 1; text-align: center; padding: 14px; border-radius: 12px; text-decoration: none; font-weight: 900; color: #fff; font-size: 0.8rem; text-transform: uppercase; transition: transform 0.2s; }
+        .nav a:active { transform: scale(0.95); }
     </style>
 </head>
 <body>
     <div class="prog"></div>
-    <div class="t-wrap"><div class="t" id="ticker">SINCRONIZANDO CENTRAL DE ALERTAS MADEIRA...</div></div>
+    <div class="t-wrap"><div class="t" id="ticker">CARREGANDO DADOS EM TEMPO REAL...</div></div>
     
     <div class="cont">
         <div class="logo-box">
@@ -115,8 +120,8 @@
         </div>
         
         <div class="contactos">
-            <a href="tel:800205215" class="btn-c">800 205 215<small>VIALITORAL (VR1)</small></a>
-            <a href="tel:800241241" class="btn-c">800 241 241<small>VIAEXPRESSO</small></a>
+            <a href="tel:800205215" class="btn-c"><span>800 205 215</span><small>VIALITORAL (VR1)</small></a>
+            <a href="tel:800241241" class="btn-c"><span>800 241 241</span><small>VIAEXPRESSO</small></a>
         </div>
         
         <a href="tel:112" class="btn-e">🚑 112 EMERGÊNCIA</a>
@@ -130,47 +135,48 @@
     </div>
 
     <script>
-        // PWA REGISTRATION
+        // PWA E NOTIFICAÇÕES
         if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js'); }
-
         let lastAlertId = "";
 
-        // CLOCK
+        // RELÓGIO V19
         function upClock() { document.getElementById('clock').innerText = new Date().toLocaleTimeString('pt-PT', {hour12:false}); }
         setInterval(upClock, 1000); upClock();
 
-        // PUSH PERMISSION
+        // PEDIDO DE PERMISSÃO V19
         function askPermission() {
             Notification.requestPermission().then(perm => {
                 if(perm === 'granted') {
-                    document.getElementById('bell').style.background = 'var(--g)';
-                    new Notification("RAM ALERTA", { body: "Subscrição Activa!", icon: "Icon.png" });
+                    document.getElementById('bell').style.background = 'rgba(0,255,136,0.2)';
+                    document.getElementById('bell').style.borderColor = 'var(--g)';
+                    new Notification("RAM ALERTA", { body: "Central de Notificações Ativa!", icon: "Icon.png" });
                 }
             });
         }
 
-        // WEATHER API (MADEIRA)
+        // METEO E CHUVA V19
         async function getW() {
             try {
                 const r = await fetch("https://api.open-meteo.com/v1/forecast?latitude=32.65&longitude=-16.90&current_weather=true&hourly=precipitation_probability");
                 const d = await r.json();
                 document.getElementById('w').innerText = Math.round(d.current_weather.temperature)+"°C";
-                document.getElementById('rn').innerText = (d.hourly.precipitation_probability[new Date().getHours()] || 0)+"% CHUVA";
-            } catch(e) {}
+                const rain = d.hourly.precipitation_probability[new Date().getHours()] || 0;
+                document.getElementById('rn').innerText = rain + "% CHUVA";
+            } catch(e) { console.log("Meteo error"); }
         }
 
-        // DATA FEED (GOOGLE SHEETS)
+        // FEED DE DADOS (ORDEM CORRIGIDA PARA SANDRO)
         async function getA() {
             try {
                 const r = await fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vQEfr4nu_M1gVlE2d2cUZdpgKwVgffuXMlNk5VSpxu9yJwVOCvnekQTwJ82BezSGTiMT0CCnXxkK_tI/pub?gid=0&single=true&output=csv&t="+Date.now());
                 const t = await r.text();
                 let lines = t.split(/\r?\n/).slice(1);
                 let data = lines.map(l => l.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(s => s.replace(/"/g,'').trim())).filter(c => c.length >= 3);
-                
-                // Sort by time
-                data.sort((a, b) => (b[3] || "").localeCompare(a[3] || ""));
 
-                // Notification Logic
+                // FIX SANDRO: INVERTER PARA MAIS RECENTE NO TOPO
+                data.reverse();
+
+                // LÓGICA DE NOTIFICAÇÃO PUSH
                 if(data.length > 0) {
                     const currentId = data[0][2] + data[0][3];
                     if (lastAlertId !== "" && lastAlertId !== currentId && Notification.permission === "granted") {
@@ -181,12 +187,14 @@
 
                 let html = ''; let tk = '';
                 data.forEach(c => {
-                    let colorClass = "txt-info";
-                    let mU = c[2].toUpperCase(); let tU = c[0].toUpperCase();
-                    if(mU.includes("ACIDENTE") || tU.includes("ACIDENTE")) colorClass = "txt-acidente";
-                    else if(tU.includes("AVARIA") || mU.includes("AVARIADO")) colorClass = "txt-avaria";
+                    let cl = "txt-info";
+                    let msgU = c[2].toUpperCase(); 
+                    let tagU = c[0].toUpperCase();
                     
-                    html += `<div class="card ${colorClass}">
+                    if(msgU.includes("ACIDENTE") || tagU.includes("ACIDENTE")) cl = "txt-acidente";
+                    else if(tagU.includes("AVARIA") || msgU.includes("AVARIADO") || msgU.includes("AVARIA")) cl = "txt-avaria";
+                    
+                    html += `<div class="card ${cl}">
                         <div class="h"><span class="time">🕒 ${c[3]||'--:--'}</span><span class="type-tag">${c[0]}</span></div>
                         <span class="loc-row">📍 ${c[1]}</span>
                         <div class="msg">${c[2]}</div>
@@ -195,13 +203,16 @@
                 });
                 document.getElementById('feed').innerHTML = html;
                 document.getElementById('ticker').innerText = tk;
-            } catch(e) {}
+            } catch(e) { console.log("Feed error"); }
         }
 
         getW(); getA(); 
         setInterval(getA, 20000); 
         setInterval(getW, 600000);
-        if(Notification.permission === "granted") document.getElementById('bell').style.background = 'var(--g)';
+        if(Notification.permission === "granted") {
+            document.getElementById('bell').style.background = 'rgba(0,255,136,0.2)';
+            document.getElementById('bell').style.borderColor = 'var(--g)';
+        }
     </script>
 </body>
 </html>

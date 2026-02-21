@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>RAM ALERTA - CENTRAL TOTAL V10</title>
+
+    <meta name="theme-color" content="#050505">
+    <meta name="description" content="RAM ALERTA - ocorrências, avarias e acidentes em tempo real na Madeira.">
+
+    <style>
+        :root { --f:#ff4d4d; --y:#ffcc00; --g:#00ff88; --b:#050505; --c:rgba(20,20,22,0.98); --i:#00e5ff; }
+        *{ box-sizing:border-box; }
+        body { font-family:-apple-system,system-ui,sans-serif; color:#fff; margin:0; padding:0; background:radial-gradient(circle at 50% 0%, #1a0000 0%, #050505 80%) fixed; }
+
+        /* BARRA DE PROGRESSO E TICKER */
+        .prog { position:fixed; top:0; left:0; height:3px; width:100%; background:linear-gradient(90deg, var(--f), var(--y)); z-index:4000; opacity:.9; }
+        .prog::after{ content:""; display:block; height:100%; width:30%; background:linear-gradient(90deg, transparent, rgba(255,255,255,.35), transparent); animation:sh 1.8s linear infinite; }
+        @keyframes sh { 0%{ transform:translateX(-120%);} 100%{ transform:translateX(420%);} }
+
+        .t-wrap { position:sticky; top:0; overflow:hidden; background:rgba(0,0,0,0.95); border-bottom:2px solid var(--f); z-index:3000; backdrop-filter:blur(10px); }
+        .t { display:flex; white-space:nowrap; padding:12px 0; animation:t 35s linear infinite; font-weight:800; font-size:.8rem; text-transform:uppercase; color:#fff; }
+        @keyframes t { 0%{ transform:translateX(100%);} 100%{ transform:translateX(-100%);} }
+
+        .cont { padding:15px; padding-bottom:140px; }
+
+        /* LOGO BOX */
+        .logo-box { width:100%; height:160px; border-radius:20px; display:flex; align-items:center; justify-content:center; background:#000; border:2px solid rgba(255,255,255,0.1); margin-bottom:16px; position:relative; overflow:hidden; box-shadow:0 0 25px rgba(255,0,0,0.18); }
+        .logo-box::before{ content:""; position:absolute; inset:-60px; background:radial-gradient(circle at 30% 30%, rgba(255,77,77,.25), transparent 55%), radial-gradient(circle at 70% 70%, rgba(0,229,255,.18), transparent 60%); filter:blur(2px); }
+        .logo-box img { max-width:85%; max-height:122px; z-index:2; }
+
+        /* SUBSCRIÇÃO */
+        .sub-bell { position:absolute; top:15px; right:15px; width:45px; height:45px; background:rgba(255,204,0,0.18); border:1px solid var(--y); border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; animation:pulse-sub 2s infinite; z-index:10; font-size:20px; color:#fff; }
+        .sub-bell[aria-pressed="true"]{ background:rgba(0,255,136,0.18); border-color:var(--g); }
+        @keyframes pulse-sub { 0%{ box-shadow:0 0 0 0 rgba(255,204,0,.35);} 70%{ box-shadow:0 0 0 10px rgba(255,204,0,0);} 100%{ box-shadow:0 0 0 0 rgba(255,204,0,0);} }
+
+        /* TÍTULO */
+        .title { margin:0 0 10px; font-weight:900; text-transform:uppercase; letter-spacing:.06em; font-size:1.05rem; color:#eee; text-align:center; }
+        .subtle { color:#9aa0a6; font-weight:800; font-size:.72rem; text-transform:uppercase; letter-spacing:.08em; text-align:center; margin:0 0 14px; }
+
+        /* BOTÕES PRINCIPAIS */
+        .btn-radar { background:linear-gradient(135deg, #0066ff, #00d4ff); color:#fff; text-decoration:none; padding:18px; border-radius:15px; display:block; margin-bottom:15px; font-weight:900; text-align:center; font-size:1.05rem; border:none; box-shadow:0 4px 15px rgba(0,102,255,0.28); text-transform:uppercase; }
+        .btn-radar:active{ transform:translateY(1px); }
+
+        .dash { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:15px; }
+        .box { background:var(--c); border-radius:15px; padding:15px; border:1px solid rgba(255,255,255,0.1); text-align:center; box-shadow:0 10px 30px rgba(0,0,0,.22); }
+        .v { font-size:1.55rem; font-weight:900; font-family:'Courier New', monospace; }
+        .lbl { font-size:.65rem; color:#aaa; font-weight:800; text-transform:uppercase; margin-top:5px; }
+
+        /* CONTACTOS */
+        .contactos { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:15px; }
+        .btn-c { background:#111; color:var(--y); text-decoration:none; padding:12px; border-radius:12px; text-align:center; border:1px solid #2a2a2a; box-shadow:0 10px 26px rgba(0,0,0,.22); }
+        .btn-c span { display:block; font-size:1.1rem; font-weight:900; }
+        .btn-c small { font-size:.6rem; color:#9aa0a6; font-weight:800; }
+
+        .btn-e { background:var(--f); color:#fff; text-decoration:none; padding:18px; border-radius:15px; display:block; margin-bottom:18px; font-weight:900; text-align:center; font-size:1.18rem; text-transform:uppercase; animation:p-red 2s infinite; box-shadow:0 18px 40px rgba(255,77,77,.18); }
+        @keyframes p-red { 0%{ box-shadow:0 0 0 0 rgba(255,26,26,.50);} 70%{ box-shadow:0 0 0 15px rgba(255,26,26,0);} 100%{ box-shadow:0 0 0 0 rgba(255,26,26,0);} }
+
+        /* ESTADO/ERROS */
+        .status { background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:10px 12px; margin:0 0 12px; color:#cfcfcf; font-weight:800; text-transform:uppercase; letter-spacing:.06em; font-size:.72rem; display:flex; justify-content:space-between; gap:10px; }
+        .status b{ color:#fff; }
+        .muted { color:#9aa0a6; }
+
+        /* CARDS */
+        .card { background:var(--c); border-radius:18px; padding:18px; margin-bottom:12px; border-left:6px solid #444; position:relative; box-shadow:0 6px 20px rgba(0,0,0,0.4); }
+        .txt-acidente { border-left-color:var(--f); color:var(--f); }
+        .txt-avaria { border-left-color:var(--y); color:var(--y); }
+        .txt-info { border-left-color:var(--g); color:var(--g); }
+
+        .h { display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:10px; border-bottom:1px solid rgba(255,255,255,0.05); padding-bottom:8px; }
+        .time { font-size:1.25rem; font-weight:900; color:#fff; display:flex; align-items:center; gap:8px; }
+        .type-tag { font-size:.72rem; font-weight:900; text-transform:uppercase; letter-spacing:1px; padding:3px 8px; border-radius:999px; background:rgba(255,255,255,0.06); color:#fff; }
+
+        .loc-row { color:#888; font-size:.85rem; font-weight:800; margin-bottom:10px; text-transform:uppercase; display:block; }
+        .msg { font-weight:800; font-size:.93rem; line-height:1.5; word-wrap:break-word; text-transform:uppercase; color:#f2f2f2; }
+
+        /* NAVEGAÇÃO FINAL */
+        .nav { position:fixed; bottom:0; left:0; right:0; background:#000; display:flex; gap:10px; padding:15px; border-top:2px solid var(--f); z-index:3000; }
+        .nav a { flex:1; text-align:center; padding:15px; border-radius:12px; text-decoration:none; font-weight:900; color:#fff; font-size:.8rem; text-transform:uppercase; }
+
+        /* Acessibilidade */
+        .sub-bell:focus-visible, .btn-radar:focus-visible, .btn-c:focus-visible, .btn-e:focus-visible, .nav a:focus-visible{
+            outline:2px solid #fff;
+            outline-offset:2px;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .t, .sub-bell, .btn-e, .prog::after { animation: none !important; }
+        }
+    </style>
+</head>
+<body>
+    <div class="prog" aria-hidden="true"></div>
+    <div class="t-wrap">
+        <div class="t" id="ticker" aria-live="polite" aria-atomic="true">INICIALIZANDO CENTRAL DE EMERGÊNCIA RAM...</div>
+    </div>
+
+    <div class="cont">
+        <div class="logo-box">
+            <button class="sub-bell" id="bell" onclick="askPermission()" aria-label="Ativar notificações" aria-pressed="false">🔔</button>
+            <img src="logo.png" alt="RAM ALERTA">
+        </div>
+
+        <h1 class="title">RAM ALERTA · VIAS E OCORRÊNCIAS</h1>
+        <p class="subtle" id="meta">Aguardando sincronização…</p>
+
+        <a href="https://www.vialitoral.com/map" target="_blank" rel="noopener noreferrer" class="btn-radar">📡 MONITOR RADAR (VIALITORAL)</a>
+
+        <div class="dash">
+            <div class="box"><div class="v" id="clock">00:00:00</div><div class="lbl">HORA ACTUAL</div></div>
+            <div class="box"><div class="v" id="w" style="color:var(--i)">--°C</div><div class="lbl" id="rn">MADEIRA</div></div>
+        </div>
+
+        <div class="contactos">
+            <a href="tel:800205215" class="btn-c" aria-label="Ligar Vialitoral 800 205 215"><span>800 205 215</span><small>VIALITORAL</small></a>
+            <a href="tel:800241241" class="btn-c" aria-label="Ligar ViaExpresso 800 241 241"><span>800 241 241</span><small>VIAEXPRESSO</small></a>
+        </div>
+
+        <a href="tel:112" class="btn-e" aria-label="Ligar 112 emergência">🚑 112 EMERGÊNCIA</a>
+
+        <div class="status" id="status">
+            <span>Estado: <b id="st">a carregar</b></span>
+            <span class="muted">Atualizado: <span id="upd">--:--</span></span>
+        </div>
+
+        <div id="feed" aria-live="polite"></div>
+    </div>
+
+    <div class="nav" aria-label="Links sociais">
+        <a href="https://www.facebook.com/share/g/1ATEH8rvEb/" target="_blank" rel="noopener noreferrer" style="background:#1877F2">FACEBOOK</a>
+        <a href="https://t.me/acidenteseocorrenciasnaram" target="_blank" rel="noopener noreferrer" style="background:#0088cc">TELEGRAM</a>
+    </div>
+
+    <script>
+        let lastAlertId = localStorage.getItem("ram_lastAlertId") || "";
+
+        function upClock() {
+            document.getElementById('clock').innerText =
+                new Date().toLocaleTimeString('pt-PT', {hour12:false});
+        }
+        setInterval(upClock, 1000); upClock();
+
+        function setStatus(text) {
+            document.getElementById('st').innerText = text;
+            document.getElementById('upd').innerText = new Date().toLocaleTimeString('pt-PT', {hour12:false}).slice(0,5);
+            document.getElementById('meta').innerText = "ONLINE · Última atualização " + document.getElementById('upd').innerText;
+        }
+
+        function setOffline(msg) {
+            document.getElementById('st').innerText = msg || "offline";
+            document.getElementById('meta').innerText = "SEM LIGAÇÃO / ERRO AO SINCRONIZAR";
+        }
+
+        function canNotify() {
+            return ("Notification" in window);
+        }
+
+        function askPermission() {
+            if (!canNotify()) return;
+
+            // MDN recomenda validar suporte e estado antes de pedir permissão. [web:120]
+            Notification.requestPermission().then(perm => {
+                const bell = document.getElementById('bell');
+                if (perm === 'granted') {
+                    bell.style.background = 'var(--g)';
+                    bell.setAttribute("aria-pressed", "true");
+                    new Notification("RAM ALERTA", { body: "Subscrição confirmada!", icon: "logo.png" });
+                }
+            }).catch(() => {});
+        }
+
+        async function getW() {
+            try {
+                // Open-Meteo: current_weather + hourly precipitation_probability. [web:58]
+                const r = await fetch("https://api.open-meteo.com/v1/forecast?latitude=32.65&longitude=-16.90&current_weather=true&hourly=precipitation_probability");
+                const d = await r.json();
+                document.getElementById('w').innerText = Math.round(d.current_weather.temperature)+"°C";
+                document.getElementById('rn').innerText = (d.hourly.precipitation_probability[new Date().getHours()] || 0)+"% CHUVA";
+            } catch(e) {}
+        }
+
+        function splitCsvLine(line) {
+            return line
+                .split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/)
+                .map(s => s.replace(/"/g,'').trim());
+        }
+
+        async function getA() {
+            try {
+                const url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQEfr4nu_M1gVlE2d2cUZdpgKwVgffuXMlNk5VSpxu9yJwVOCvnekQTwJ82BezSGTiMT0CCnXxkK_tI/pub?gid=0&single=true&output=csv&t="+Date.now();
+                const r = await fetch(url);
+                const t = await r.text();
+
+                // Se vier HTML/erro, não tenta parsear como CSV.
+                if (!r.ok || t.startsWith("<!DOCTYPE html")) {
+                    setOffline("erro CSV");
+                    document.getElementById('feed').innerHTML = "";
+                    document.getElementById('ticker').innerText = "ERRO AO LER DADOS (CSV)";
+                    return;
+                }
+
+                const lines = t.split(/
+?
+/)
+                    .slice(1)
+                    .filter(l => l && l.trim() !== "");
+
+                let html = '';
+                let tk = '';
+
+                if (lines.length === 0) {
+                    document.getElementById('feed').innerHTML =
+                        '<div class="card txt-info"><div class="h"><span class="time">🕒 --:--</span><span class="type-tag">INFO</span></div><span class="loc-row">📍 RAM</span><div class="msg">SEM OCORRÊNCIAS REGISTADAS</div></div>';
+                    document.getElementById('ticker').innerText = "SEM OCORRÊNCIAS REGISTADAS";
+                    setStatus("ok (0)");
+                    return;
+                }
+
+                // Notificação: pega na última linha útil (mais recente) e compara com o último ID.
+                const latest = splitCsvLine(lines[lines.length - 1]);
+                const currentId = (latest[2] || "") + (latest[3] || "");
+
+                if (lastAlertId !== "" && lastAlertId !== currentId && canNotify() && Notification.permission === "granted") {
+                    new Notification(`⚠️ ${latest[1]}`, { body: latest[2], icon: "logo.png" });
+                }
+
+                lastAlertId = currentId;
+                localStorage.setItem("ram_lastAlertId", lastAlertId);
+
+                lines.reverse().forEach(l => {
+                    const c = splitCsvLine(l);
+
+                    if (c.length >= 3) {
+                        let colorClass = "txt-info";
+                        let mU = (c[2] || "").toUpperCase();
+                        let tU = (c[0] || "").toUpperCase();
+
+                        if (mU.includes("ACIDENTE") || tU.includes("ACIDENTE")) colorClass = "txt-acidente";
+                        else if (tU.includes("AVARIA") || mU.includes("AVARIADO")) colorClass = "txt-avaria";
+
+                        html += `<div class="card ${colorClass}">
+                            <div class="h">
+                                <span class="time">🕒 ${c[3]||'--:--'}</span>
+                                <span class="type-tag">${c[0]||'INFO'}</span>
+                            </div>
+                            <span class="loc-row">📍 ${c[1]||'--'}</span>
+                            <div class="msg">${c[2]||''}</div>
+                        </div>`;
+
+                        tk += ` 🚨 ${c[1]||'--'}: ${c[2]||''} | `;
+                    }
+                });
+
+                document.getElementById('feed').innerHTML = html;
+                document.getElementById('ticker').innerText = tk || "SEM OCORRÊNCIAS REGISTADAS";
+                setStatus("ok (" + lines.length + ")");
+            } catch(e) {
+                setOffline("sem rede");
+            }
+        }
+
+        getW(); getA();
+        setInterval(getA, 20000);
+        setInterval(getW, 600000);
+
+        if (canNotify() && Notification.permission === "granted") {
+            const bell = document.getElementById('bell');
+            bell.style.background = 'var(--g)';
+            bell.setAttribute("aria-pressed", "true");
+        }
+    </script>
+</body>
+</html>

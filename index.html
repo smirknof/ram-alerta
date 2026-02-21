@@ -3,11 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>RAM ALERTA - Monitorização Profissional v13</title>
+    <title>RAM ALERTA - MADEIRA</title>
     
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#d32f2f">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#000000">
     <link rel="icon" type="image/png" href="icon.png">
 
     <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
@@ -17,186 +16,106 @@
         await OneSignal.init({
           appId: "ab3ef110-1713-4982-955a-f59b80a84170",
           safari_web_id: "web.onesignal.auto.6074127c-3d60-4648-8422-5f6598c171e2",
-          notifyButton: {
-            enable: true,
-            size: 'medium',
-            theme: 'default',
-            position: 'bottom-right',
-            offset: { bottom: '20px', right: '20px' },
-            text: {
-              'tip.state.unsubscribed': 'Subscrever Alertas',
-              'tip.state.subscribed': 'Alertas Ativos',
-              'dialog.main.title': 'Gerir Notificações',
-              'dialog.main.button.subscribe': 'ATIVAR',
-              'dialog.main.button.unsubscribe': 'DESATIVAR'
-            }
-          },
-          allowLocalhostAsSecureOrigin: true
+          notifyButton: { enable: true }
         });
       });
     </script>
 
     <style>
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #050505;
-            color: #e0e0e0;
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-        }
-        .main-card {
-            background: linear-gradient(145deg, #121212, #1a1a1a);
-            width: 100%;
-            max-width: 450px;
-            border-radius: 25px;
-            padding: 30px;
-            border: 1px solid #333;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.8);
-            text-align: center;
-            margin-top: 40px;
-        }
-        .header { margin-bottom: 25px; }
-        .logo-area {
-            width: 80px;
-            height: 80px;
-            background: #d32f2f;
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 15px;
-            box-shadow: 0 0 20px rgba(211, 47, 47, 0.4);
-            font-size: 40px;
-        }
-        h1 { margin: 0; font-size: 26px; letter-spacing: 1px; color: #fff; }
-        .status-panel {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 15px;
-            padding: 15px;
-            margin: 20px 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .dot {
-            height: 10px;
-            width: 10px;
-            background-color: #4CAF50;
-            border-radius: 50%;
-            display: inline-block;
-            margin-right: 10px;
-            box-shadow: 0 0 8px #4CAF50;
-            animation: pulse 2s infinite;
-        }
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.4; }
-            100% { opacity: 1; }
-        }
-        .info-text {
-            font-size: 14px;
-            color: #999;
-            line-height: 1.6;
-            margin-bottom: 25px;
-        }
-        .log-container {
-            width: 100%;
-            background: #000;
-            border-radius: 12px;
-            padding: 15px;
-            text-align: left;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 12px;
-            color: #00ff00;
-            border: 1px solid #222;
-            max-height: 150px;
-            overflow-y: auto;
-        }
-        .footer-note {
-            margin-top: 30px;
-            font-size: 11px;
-            color: #444;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        /* Botão de Instalação Customizado */
-        #pwa-install {
-            display: none;
-            background: #d32f2f;
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 10px;
-            font-weight: bold;
-            margin-top: 20px;
-            width: 100%;
-            cursor: pointer;
-        }
+        * { box-sizing: border-box; }
+        body { background-color: #000; color: #fff; font-family: -apple-system, sans-serif; margin: 0; padding: 15px; display: flex; flex-direction: column; align-items: center; }
+        
+        .main-wrapper { width: 100%; max-width: 400px; }
+
+        /* Banner Principal */
+        .header-img { width: 100%; border-radius: 20px; border: 1px solid #222; margin-bottom: 15px; }
+
+        /* Botões de Ação */
+        .btn { width: 100%; padding: 18px; border-radius: 12px; font-weight: bold; text-align: center; margin-bottom: 12px; font-size: 14px; text-transform: uppercase; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .btn-blue { background: #339af0; color: #000; }
+        .btn-red { background: #ff4d4d; color: #fff; font-size: 18px; box-shadow: 0 0 20px rgba(255, 77, 77, 0.2); }
+
+        /* Grid de Informação */
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+        .card { background: #121212; border: 1px solid #222; border-radius: 15px; padding: 15px; text-align: center; }
+        .card h2 { margin: 0; font-size: 26px; }
+        .card p { margin: 5px 0 0; font-size: 10px; color: #666; text-transform: uppercase; letter-spacing: 1px; }
+        .text-blue { color: #339af0; }
+
+        /* Contactos */
+        .contact-card { background: #121212; border: 1px solid #222; border-radius: 12px; padding: 10px; text-align: center; }
+        .contact-card h3 { margin: 0; color: #fcc419; font-size: 16px; }
+
+        /* Status de Alerta (Onde a Coluna C aparece) */
+        .alert-box { background: #121212; border: 1px solid #333; border-radius: 20px; padding: 20px; margin-top: 10px; border-left: 4px solid #333; }
+        .alert-header { display: flex; justify-content: space-between; font-size: 12px; color: #666; margin-bottom: 10px; }
+        .alert-content { font-size: 16px; font-weight: bold; color: #fff; }
+        .status-dot { height: 8px; width: 8px; background: #4CAF50; border-radius: 50%; display: inline-block; margin-right: 5px; box-shadow: 0 0 5px #4CAF50; }
+
+        /* Rodapé Social */
+        .social-footer { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
+        .btn-social { padding: 12px; border-radius: 10px; border: none; font-weight: bold; font-size: 12px; color: #fff; }
+        .bg-fb { background: #3b5998; }
+        .bg-tg { background: #0088cc; }
     </style>
 </head>
 <body>
 
-    <div class="main-card">
-        <div class="header">
-            <div class="logo-area">🚨</div>
-            <h1>RAM ALERTA</h1>
-            <p style="color: #d32f2f; font-weight: bold; margin-top: 5px;">Monitorização Madeira</p>
+    <div class="main-wrapper">
+        <img src="logo.png" alt="RAM ALERTA" class="header-img">
+
+        <button class="btn btn-blue">📡 Radares e Câmaras Vialitoral</button>
+
+        <div class="info-grid">
+            <div class="card">
+                <h2 id="time">00:00:00</h2>
+                <p>Hora Atual</p>
+            </div>
+            <div class="card">
+                <h2 class="text-blue">14°C</h2>
+                <p>Céu Limpo</p>
+            </div>
         </div>
 
-        <div class="status-panel">
-            <span class="dot"></span>
-            <span style="font-size: 13px; font-weight: bold;">SISTEMA V13 OPERACIONAL</span>
+        <div class="info-grid">
+            <div class="contact-card">
+                <h3>800 205 215</h3>
+                <p>VIALITORAL</p>
+            </div>
+            <div class="contact-card">
+                <h3>800 241 241</h3>
+                <p>VIAEXPRESSO</p>
+            </div>
         </div>
 
-        <p class="info-text">
-            Bem-vindo ao sistema de notificações críticas. <br>
-            Receba alertas de trânsito, acidentes e emergências diretamente no seu dispositivo.
-        </p>
+        <button class="btn btn-red">🚑 112 EMERGÊNCIA</button>
 
-        <div class="log-container" id="log">
-            > Sistema iniciado...<br>
-            > A aguardar subscrição OneSignal...<br>
-            > Pronto para receber dados da Coluna C...
+        <div class="alert-box">
+            <div class="alert-header">
+                <span>🕒 <b class="text-blue">ATIVO</b></span>
+                <span>informação</span>
+            </div>
+            <div class="alert-content">
+                📍 Madeira<br>
+                <span id="last-msg" style="color: #888; font-size: 14px;">A AGUARDAR DADOS...</span>
+            </div>
+            <div style="margin-top: 15px; font-size: 10px; color: #444;">
+                <span class="status-dot"></span> V14 - OPERACIONAL - SANDRO FERREIRA
+            </div>
         </div>
 
-        <button id="pwa-install">ADICIONAR AO ECRÃ PRINCIPAL</button>
-
-        <div class="footer-note">Build 2026.V13 - Sandro Ferreira</div>
+        <div class="social-footer">
+            <button class="btn-social bg-fb">FACEBOOK</button>
+            <button class="btn-social bg-tg">TELEGRAM</button>
+        </div>
     </div>
 
     <script>
-        // Lógica de Instalação PWA
-        let deferredPrompt;
-        const installBtn = document.getElementById('pwa-install');
-
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            installBtn.style.display = 'block';
-        });
-
-        installBtn.addEventListener('click', async () => {
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                const { outcome } = await deferredPrompt.userChoice;
-                if (outcome === 'accepted') {
-                    installBtn.style.display = 'none';
-                }
-                deferredPrompt = null;
-            }
-        });
-
-        // Simulação de Log para feedback visual
-        setTimeout(() => {
-            const log = document.getElementById('log');
-            log.innerHTML += "<br>> Ligação à Cloud estabelecida.";
-        }, 3000);
+        function clock() {
+            const d = new Date();
+            document.getElementById('time').innerHTML = d.toLocaleTimeString('pt-PT');
+        }
+        setInterval(clock, 1000); clock();
     </script>
-
 </body>
 </html>

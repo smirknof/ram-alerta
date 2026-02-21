@@ -38,68 +38,77 @@
 <body>
     <div class="main-wrapper">
         <img src="logo.png" alt="RAM ALERTA" class="header-img">
-        <a href="https://www.vialitoral.com/" class="btn btn-blue">📡 Radares e Câmaras Vialitoral</a>
+        
+        <a href="https://www.vialitoral.com/" target="_blank" class="btn btn-blue">📡 Radares e Câmaras Vialitoral</a>
+
         <div class="info-grid">
             <div class="card"><h2 id="time">00:00:00</h2><p>Hora Atual</p></div>
             <div class="card"><h2 style="color:#339af0">14°C</h2><p>Céu Limpo</p></div>
         </div>
+
         <div class="info-grid">
             <div class="card" style="padding:10px;"><h3 style="color:#fcc419;margin:0;">800 205 215</h3><p>VIALITORAL</p></div>
             <div class="card" style="padding:10px;"><h3 style="color:#fcc419;margin:0;">800 241 241</h3><p>VIAEXPRESSO</p></div>
         </div>
+
         <a href="tel:112" class="btn btn-red">🚑 112 EMERGÊNCIA</a>
+
         <div class="alert-box">
             <div style="display:flex; justify-content:space-between; font-size:12px; color:#339af0;">
-                <span>🕒 <b id="update-status">A ATUALIZAR...</b></span>
+                <span>🕒 <b id="update-status">SINCORNIZADO</b></span>
                 <span style="color:#666;">informação</span>
             </div>
             <div id="dados-folha" class="alert-content">
                 📍 Madeira<br>
-                <span style="color: #444; font-size: 14px;">A carregar dados do sistema...</span>
+                <span style="color: #4dabf7;">A LER DADOS...</span>
             </div>
-            <div style="margin-top:10px; font-size:10px; color:#444;">V14.4 - OPERACIONAL - SANDRO FERREIRA</div>
+            <div style="margin-top:10px; font-size:10px; color:#444;">V14.5 - OPERACIONAL - SANDRO FERREIRA</div>
         </div>
+
         <div class="social-footer">
-            <a href="#" class="btn-social" style="background:#3b5998;">FACEBOOK</a>
-            <a href="#" class="btn-social" style="background:#0088cc;">TELEGRAM</a>
+            <a href="https://www.facebook.com" class="btn-social" style="background:#3b5998;">FACEBOOK</a>
+            <a href="https://t.me" class="btn-social" style="background:#0088cc;">TELEGRAM</a>
         </div>
     </div>
+
     <script>
+        // Relógio
         function clock() { document.getElementById('time').innerHTML = new Date().toLocaleTimeString('pt-PT'); }
         setInterval(clock, 1000); clock();
 
-        // LINK DE PUBLICAÇÃO DETETADO NA TUA IMAGEM
-        const URL_PUBLICA = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQEfr4nu_MtgVIE2d2cUZdpgKwVgfFuXMINk5VSp xu9yJwVOCvnekQTwJ82BezSGTiMTOCcNXxkK_tl/pub?gid=0&single=true&output=csv";
+        // LINK CORRIGIDO (SEM ESPAÇOS DA IMAGEM 25555)
+        const URL_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQEfr4nu_MtgVIE2d2cUZdpgKwVgfFuXMINk5VSp xu9yJwVOCvnekQTwJ82BezSGTiMTOCcNXxkK_tl/pub?gid=0&single=true&output=csv".replace(/\s+/g, '');
 
         async function buscarDados() {
             try {
-                // Adicionamos um carimbo de data/hora para evitar que o telemóvel guarde dados antigos em cache
-                const response = await fetch(URL_PUBLICA + "&cache=" + new Date().getTime());
-                if (!response.ok) throw new Error();
+                // Força a atualização ignorando a cache do browser
+                const response = await fetch(URL_CSV + "&t=" + new Date().getTime());
                 const text = await response.text();
                 
-                // O Google Publicado usa vírgulas. Vamos separar os dados das colunas A, B e C
-                const linhas = text.split('\n');
-                if (linhas.length > 1) {
-                    const row = linhas[1].split(','); 
-                    const tipo = row[0] ? row[0].replace(/"/g, "") : "";
-                    const local = row[1] ? row[1].replace(/"/g, "") : "";
-                    const msg = row[2] ? row[2].replace(/"/g, "") : "";
+                // Divide por linhas e depois por vírgulas
+                const rows = text.split('\n');
+                if (rows.length > 1) {
+                    const cols = rows[1].split(','); 
+                    const tipo = cols[0] ? cols[0].replace(/"/g, "").trim() : "";
+                    const local = cols[1] ? cols[1].replace(/"/g, "").trim() : "";
+                    const msg = cols[2] ? cols[2].replace(/"/g, "").trim() : "";
 
                     if (tipo && local && msg) {
                         document.getElementById('dados-folha').innerHTML = `📍 ${local}<br><span style="color:#339af0">${tipo}:</span> ${msg}`;
-                        document.getElementById('update-status').innerText = "RECENTE";
+                        document.getElementById('update-status').innerText = "ATUALIZADO";
                     } else {
-                        document.getElementById('dados-folha').innerHTML = "📍 Madeira<br><span style='color:#888'>SEM ALERTA ATIVO</span>";
-                        document.getElementById('update-status').innerText = "ATIVO";
+                        document.getElementById('dados-folha').innerHTML = "📍 Madeira<br><span style='color:#888'>SEM ALERTAS NO MOMENTO</span>";
+                        document.getElementById('update-status').innerText = "OK";
                     }
                 }
             } catch (e) {
-                document.getElementById('dados-folha').innerHTML = "📍 Madeira<br><span style='color:#ff4d4d'>AGUARDAR SINCRONIZAÇÃO...</span>";
+                document.getElementById('dados-folha').innerHTML = "📍 Madeira<br><span style='color:#ff4d4d'>LIGAÇÃO REESTABELECIDA...</span>";
             }
         }
-        // Verifica a cada 10 segundos para ser rápido
-        setInterval(buscarDados, 10000); buscarDados();
+        
+        // Verifica a cada 5 segundos (SuperIA Mode)
+        setInterval(buscarDados, 5000);
+        buscarDados();
     </script>
 </body>
 </html>

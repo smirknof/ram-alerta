@@ -1,10 +1,21 @@
-const CACHE_NAME = 'ram-alerta-v15';
-const assets = ['./', './index.html', './logo.png'];
-
-self.addEventListener('install', e => {
-  e.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(assets)));
+// Service Worker para RAM ALERTA
+self.addEventListener('install', (e) => {
+  self.skipWaiting();
 });
 
-self.addEventListener('fetch', e => {
-  e.respondWith(caches.match(e.request).then(res => res || fetch(e.request)));
+self.addEventListener('activate', (e) => {
+  return self.clients.claim();
+});
+
+// Este código permite que a notificação apareça mesmo com o Chrome em fundo
+self.addEventListener('push', function(event) {
+  const data = event.data.json();
+  const options = {
+    body: data.body,
+    icon: 'Icon.png',
+    badge: 'Icon.png',
+    vibrate: [300, 100, 300],
+    data: { url: self.registration.scope }
+  };
+  event.waitUntil(self.registration.showNotification(data.title, options));
 });

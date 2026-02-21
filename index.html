@@ -3,475 +3,152 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>RAM ALERTA - CENTRAL TOTAL V10</title>
+    <title>RAM ALERTA</title>
+    
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#ff4d4d">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="apple-touch-icon" href="logo.png">
+
     <style>
-        :root {
-            --f: #ff4d4d;
-            --y: #ffcc00;
-            --g: #00ff88;
-            --b: #050505;
-            --c: rgba(20,20,22,0.98);
-            --i: #00e5ff;
-        }
-
-        * { box-sizing: border-box; }
-
-        body {
-            font-family: -apple-system, system-ui, sans-serif;
-            background: radial-gradient(circle at 50% 0%, #1a0000 0%, #050505 80%) fixed;
-            color: #fff;
-            margin: 0;
-            padding: 0;
-        }
-
+        :root { --f: #ff4d4d; --y: #ffcc00; --g: #00ff88; --b: #050505; --c: rgba(20,20,22,0.98); --i: #00e5ff; }
+        body { font-family: -apple-system, system-ui, sans-serif; background: var(--b); color: #fff; margin: 0; padding: 0; background: radial-gradient(circle at 50% 0%, #1a0000 0%, #050505 80%) fixed; }
+        
         /* BARRA DE PROGRESSO E TICKER */
-        .prog {
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 3px;
-            background: linear-gradient(90deg, var(--f), var(--y));
-            z-index: 4000;
-            animation: l 25s linear infinite;
-        }
+        .prog { position: fixed; top: 0; height: 3px; background: linear-gradient(90deg, var(--f), var(--y)); z-index: 4000; animation: l 25s linear infinite; }
         @keyframes l { 0% { width: 0; } 100% { width: 100%; } }
-
-        .t-wrap {
-            position: sticky;
-            top: 0;
-            overflow: hidden;
-            background: rgba(0,0,0,0.95);
-            border-bottom: 2px solid var(--f);
-            z-index: 3000;
-            backdrop-filter: blur(10px);
-        }
-        .t {
-            display: flex;
-            white-space: nowrap;
-            padding: 12px 0;
-            animation: t 35s linear infinite;
-            font-weight: 800;
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            color: #fff;
-        }
+        .t-wrap { position: sticky; top: 0; overflow: hidden; background: rgba(0,0,0,0.95); border-bottom: 2px solid var(--f); z-index: 3000; backdrop-filter: blur(10px); }
+        .t { display: flex; white-space: nowrap; padding: 12px 0; animation: t 35s linear infinite; font-weight: 800; font-size: 0.8rem; text-transform: uppercase; color: #fff; }
         @keyframes t { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
 
-        .cont {
-            padding: 15px;
-            padding-bottom: 140px;
-        }
+        .cont { padding: 15px; padding-bottom: 140px; }
+        
+        /* LOGO TÁTICO SVG */
+        .logo-box { width: 100%; height: 160px; border-radius: 20px; display: flex; align-items: center; justify-content: center; background: #000; border: 2px solid rgba(255,77,77,0.3); margin-bottom: 20px; position: relative; }
+        .logo-box svg { height: 110px; filter: drop-shadow(0 0 10px var(--f)); }
+        
+        .sub-bell { position: absolute; top: 15px; right: 15px; width: 45px; height: 45px; background: rgba(255,204,0,0.1); border: 1px solid var(--y); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; animation: pulse-sub 2s infinite; z-index: 10; font-size: 20px; }
+        @keyframes pulse-sub { 0% { box-shadow: 0 0 0 0 rgba(255,204,0,0.4); } 70% { box-shadow: 0 0 0 10px rgba(255,204,0,0); } 100% { box-shadow: 0 0 0 0 rgba(255,204,0,0); } }
 
-        /* LOGO BOX */
-        .logo-box {
-            width: 100%;
-            height: 170px;
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #000;
-            border: 2px solid rgba(255,255,255,0.1);
-            margin-bottom: 20px;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 0 25px rgba(255,0,0,0.25);
-        }
-        .logo-box img {
-            max-width: 85%;
-            max-height: 120px;
-            z-index: 2;
-        }
+        .btn-radar { background: linear-gradient(135deg, #0066ff, #00d4ff); color: #fff; text-decoration: none; padding: 18px; border-radius: 15px; display: block; margin-bottom: 15px; font-weight: 900; text-align: center; font-size: 1.1rem; text-transform: uppercase; box-shadow: 0 4px 15px rgba(0,102,255,0.4); }
 
-        /* ICON DE SUBSCREVER NO LOGO */
-        .sub-bell {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            width: 45px;
-            height: 45px;
-            background: rgba(255,204,0,0.2);
-            border: 1px solid var(--y);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            animation: pulse-sub 2s infinite;
-            z-index: 10;
-            color: #fff;
-        }
-        @keyframes pulse-sub {
-            0% { box-shadow: 0 0 0 0 rgba(255,204,0,0.4); }
-            70% { box-shadow: 0 0 0 10px rgba(255,204,0,0); }
-            100% { box-shadow: 0 0 0 0 rgba(255,204,0,0); }
-        }
+        .dash { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 15px; }
+        .box { background: var(--c); border-radius: 15px; padding: 15px; border: 1px solid rgba(255,255,255,0.1); text-align: center; }
+        .v { font-size: 1.6rem; font-weight: 900; font-family: monospace; }
+        .lbl { font-size: 0.65rem; color: #aaa; font-weight: 800; text-transform: uppercase; }
 
-        .title {
-            font-size: 1rem;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: .08em;
-            margin: 0 0 12px;
-        }
+        .btn-e { background: var(--f); color: #fff; text-decoration: none; padding: 18px; border-radius: 15px; display: block; margin-bottom: 20px; font-weight: 900; text-align: center; font-size: 1.2rem; text-transform: uppercase; animation: p-red 2s infinite; }
+        @keyframes p-red { 0% { box-shadow: 0 0 0 0 rgba(255,26,26,0.6); } 70% { box-shadow: 0 0 0 15px rgba(255,26,26,0); } 100% { box-shadow: 0 0 0 0 rgba(255,26,26,0); } }
 
-        /* BOTÕES PRINCIPAIS */
-        .btn-radar {
-            background: linear-gradient(135deg, #0066ff, #00d4ff);
-            color: #fff;
-            text-decoration: none;
-            padding: 16px;
-            border-radius: 15px;
-            display: block;
-            margin-bottom: 15px;
-            font-weight: 900;
-            text-align: center;
-            font-size: 1.05rem;
-            border: none;
-            box-shadow: 0 4px 15px rgba(0,102,255,0.3);
-            text-transform: uppercase;
-        }
+        /* CARDS COM GLOW PULSANTE LENTO (ESTILO V14) */
+        .card { background: var(--c); border-radius: 18px; padding: 20px; margin-bottom: 15px; border-left: 6px solid #444; position: relative; }
+        .txt-acidente { border-left-color: var(--f); color: var(--f); animation: glow-f 3s ease-in-out infinite; }
+        .txt-avaria { border-left-color: var(--y); color: var(--y); animation: glow-y 3s ease-in-out infinite; }
+        .txt-info { border-left-color: var(--g); color: var(--g); animation: glow-g 3s ease-in-out infinite; }
 
-        .dash {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-bottom: 15px;
-        }
-        .box {
-            background: var(--c);
-            border-radius: 15px;
-            padding: 15px;
-            border: 1px solid rgba(255,255,255,0.1);
-            text-align: center;
-        }
-        .v {
-            font-size: 1.6rem;
-            font-weight: 900;
-            font-family: 'Courier New', monospace;
-        }
-        .lbl {
-            font-size: 0.65rem;
-            color: #aaa;
-            font-weight: 800;
-            text-transform: uppercase;
-            margin-top: 5px;
-        }
+        @keyframes glow-f { 0%, 100% { box-shadow: 0 0 5px rgba(255, 77, 77, 0.1); } 50% { box-shadow: 0 0 25px rgba(255, 77, 77, 0.5); } }
+        @keyframes glow-y { 0%, 100% { box-shadow: 0 0 5px rgba(255, 204, 0, 0.1); } 50% { box-shadow: 0 0 25px rgba(255, 204, 0, 0.5); } }
+        @keyframes glow-g { 0%, 100% { box-shadow: 0 0 5px rgba(0, 255, 136, 0.1); } 50% { box-shadow: 0 0 25px rgba(0, 255, 136, 0.4); } }
 
-        /* CONTACTOS CONCESSIONÁRIAS */
-        .section-label {
-            margin: 10px 0 6px;
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: .08em;
-            color: #ccc;
-        }
+        .h { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px; }
+        .time { font-size: 1.4rem; font-weight: 900; color: #fff; }
+        .type-tag { font-size: 0.75rem; font-weight: 900; text-transform: uppercase; }
+        .loc-row { color: #888; font-size: 0.85rem; font-weight: 800; margin-bottom: 10px; text-transform: uppercase; display: block; }
+        .msg { font-weight: 700; font-size: 0.95rem; line-height: 1.5; text-transform: uppercase; }
 
-        .contactos {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-        .btn-c {
-            background: #1a1a1a;
-            color: var(--y);
-            text-decoration: none;
-            padding: 12px;
-            border-radius: 12px;
-            text-align: center;
-            border: 1px solid #333;
-        }
-        .btn-c span {
-            display: block;
-            font-size: 1.1rem;
-            font-weight: 900;
-        }
-        .btn-c small {
-            font-size: 0.6rem;
-            color: #777;
-            font-weight: 800;
-        }
-
-        .btn-e {
-            background: var(--f);
-            color: #fff;
-            text-decoration: none;
-            padding: 18px;
-            border-radius: 15px;
-            display: block;
-            margin-bottom: 20px;
-            font-weight: 900;
-            text-align: center;
-            font-size: 1.2rem;
-            text-transform: uppercase;
-            animation: p-red 2s infinite;
-        }
-        @keyframes p-red {
-            0% { box-shadow: 0 0 0 0 rgba(255,26,26,0.6); }
-            70% { box-shadow: 0 0 0 15px rgba(255,26,26,0); }
-            100% { box-shadow: 0 0 0 0 rgba(255,26,26,0); }
-        }
-
-        /* CARDS DINÂMICOS */
-        .card {
-            background: var(--c);
-            border-radius: 18px;
-            padding: 18px 16px;
-            margin-bottom: 12px;
-            border-left: 6px solid #444;
-            position: relative;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.45);
-        }
-        .txt-acidente { border-left-color: var(--f); color: var(--f); }
-        .txt-avaria   { border-left-color: var(--y); color: var(--y); }
-        .txt-info     { border-left-color: var(--g); color: var(--g); }
-
-        .h {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            padding-bottom: 8px;
-        }
-        .time {
-            font-size: 1.2rem;
-            font-weight: 900;
-            color: #fff;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .type-tag {
-            font-size: 0.75rem;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            padding: 3px 8px;
-            border-radius: 999px;
-            background: rgba(255,255,255,0.06);
-            color: #fff;
-        }
-
-        .loc-row {
-            color: #aaa;
-            font-size: 0.8rem;
-            font-weight: 800;
-            margin-bottom: 8px;
-            text-transform: uppercase;
-            display: block;
-        }
-        .msg {
-            font-weight: 700;
-            font-size: 0.9rem;
-            line-height: 1.5;
-            word-wrap: break-word;
-            text-transform: uppercase;
-            color: #f4f4f4;
-        }
-
-        /* NAVEGAÇÃO FINAL */
-        .nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: #000;
-            display: flex;
-            gap: 10px;
-            padding: 12px 15px;
-            border-top: 2px solid var(--f);
-            z-index: 3000;
-        }
-        .nav a {
-            flex: 1;
-            text-align: center;
-            padding: 12px;
-            border-radius: 12px;
-            text-decoration: none;
-            font-weight: 900;
-            color: #fff;
-            font-size: 0.8rem;
-            text-transform: uppercase;
-        }
-
-        .nav a:focus-visible,
-        .btn-radar:focus-visible,
-        .btn-c:focus-visible,
-        .btn-e:focus-visible,
-        .sub-bell:focus-visible {
-            outline: 2px solid #fff;
-            outline-offset: 2px;
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            * {
-                animation-duration: 0.001ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.001ms !important;
-            }
-        }
+        .nav { position: fixed; bottom: 0; left: 0; right: 0; background: #000; display: flex; gap: 10px; padding: 15px; border-top: 2px solid var(--f); z-index: 3000; }
+        .nav a { flex: 1; text-align: center; padding: 15px; border-radius: 12px; text-decoration: none; font-weight: 900; color: #fff; font-size: 0.8rem; text-transform: uppercase; }
     </style>
 </head>
 <body>
-    <div class="prog" aria-hidden="true"></div>
-    <div class="t-wrap">
-        <div class="t" id="ticker">INICIALIZANDO CENTRAL DE EMERGÊNCIA RAM...</div>
-    </div>
+    <div class="prog"></div>
+    <div class="t-wrap"><div class="t" id="ticker">SINCRONIZANDO CENTRAL DE EMERGÊNCIA RAM...</div></div>
     
     <div class="cont">
         <div class="logo-box">
-            <button class="sub-bell" id="bell" type="button" onclick="askPermission()" aria-label="Ativar notificações de novas ocorrências">
-                🔔
-            </button>
-            <img src="logo.png" alt="RAM ALERTA">
+            <button class="sub-bell" id="bell" onclick="askPermission()">🔔</button>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+                <path d="M50 15L85 80H15L50 15Z" fill="none" stroke="#ff4d4d" stroke-width="5"/>
+                <text x="50" y="65" font-family="Arial" font-size="20" font-weight="bold" fill="white" text-anchor="middle">RAM</text>
+                <text x="50" y="88" font-family="Arial" font-size="8" font-weight="bold" fill="#ff4d4d" text-anchor="middle">ALERTA</text>
+            </svg>
         </div>
 
-        <h1 class="title">RAM ALERTA · VIAS E OCORRÊNCIAS</h1>
-
-        <a href="https://www.vialitoral.com/map" target="_blank" class="btn-radar" rel="noopener noreferrer">
-            📡 Monitor radar (Vialitoral)
-        </a>
-
-        <div class="dash">
-            <div class="box" aria-live="polite">
-                <div class="v" id="clock">00:00:00</div>
-                <div class="lbl">Hora actual</div>
-            </div>
-            <div class="box" aria-live="polite">
-                <div class="v" id="w" style="color:var(--i)">--°C</div>
-                <div class="lbl" id="rn">Madeira</div>
-            </div>
-        </div>
-
-        <p class="section-label">Contactos de estrada</p>
-        <div class="contactos">
-            <a href="tel:800205215" class="btn-c">
-                <span>800 205 215</span>
-                <small>Vialitoral</small>
-            </a>
-            <a href="tel:800241241" class="btn-c">
-                <span>800 241 241</span>
-                <small>ViaExpresso</small>
-            </a>
-        </div>
-
-        <a href="tel:112" class="btn-e" aria-label="Ligar para o 112 emergência">
-            🚑 112 Emergência
-        </a>
+        <a href="https://www.vialitoral.com/map" target="_blank" class="btn-radar">📡 MONITOR RADAR (VIALITORAL)</a>
         
-        <p class="section-label">Ocorrências em tempo real</p>
+        <div class="dash">
+            <div class="box"><div class="v" id="clock">00:00:00</div><div class="lbl">HORA ACTUAL</div></div>
+            <div class="box"><div class="v" id="w" style="color:var(--i)">--°C</div><div class="lbl" id="rn">MADEIRA</div></div>
+        </div>
+        
+        <a href="tel:112" class="btn-e">🚑 112 EMERGÊNCIA</a>
         <div id="feed"></div>
     </div>
 
-    <div class="nav" aria-label="Redes sociais RAM Alerta">
-        <a href="https://www.facebook.com/share/g/1ATEH8rvEb/" style="background:#1877F2" target="_blank" rel="noopener noreferrer">
-            Facebook
-        </a>
-        <a href="https://t.me/acidenteseocorrenciasnaram" style="background:#0088cc" target="_blank" rel="noopener noreferrer">
-            Telegram
-        </a>
+    <div class="nav">
+        <a href="https://www.facebook.com/share/g/1ATEH8rvEb/" style="background:#1877F2">FACEBOOK</a>
+        <a href="https://t.me/acidenteseocorrenciasnaram" style="background:#0088cc">TELEGRAM</a>
     </div>
 
     <script>
-        let lastAlertId = "";
-
-        function upClock() {
-            document.getElementById('clock').innerText =
-                new Date().toLocaleTimeString('pt-PT', {hour12:false});
+        // REGISTO DO SERVICE WORKER (PWA)
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js').then(() => console.log("PWA Ativo"));
         }
-        setInterval(upClock, 1000);
-        upClock();
+
+        let lastId = "";
+        function upClock() { document.getElementById('clock').innerText = new Date().toLocaleTimeString('pt-PT',{hour12:false}); }
+        setInterval(upClock, 1000); upClock();
 
         function askPermission() {
-            if (!('Notification' in window)) {
-                alert("O seu navegador não suporta notificações.");
-                return;
-            }
-            Notification.requestPermission().then(perm => {
-                if(perm === 'granted') {
-                    document.getElementById('bell').style.background = 'var(--g)';
-                    new Notification("RAM ALERTA", {
-                        body: "Subscrição confirmada!",
-                        icon: "logo.png"
-                    });
-                }
-            }).catch(console.error);
+            Notification.requestPermission().then(p => { if(p==='granted') { document.getElementById('bell').style.background='var(--g)'; new Notification("RAM ALERTA", {body:"Sistema Ativo!"}); } });
         }
 
         async function getW() {
             try {
                 const r = await fetch("https://api.open-meteo.com/v1/forecast?latitude=32.65&longitude=-16.90&current_weather=true&hourly=precipitation_probability");
-                const d = await r.json(); /* API Open‑Meteo current_weather/hourly. [web:58] */
+                const d = await r.json();
                 document.getElementById('w').innerText = Math.round(d.current_weather.temperature)+"°C";
-                document.getElementById('rn').innerText =
-                    (d.hourly.precipitation_probability[new Date().getHours()] || 0)+"% chuva";
-            } catch(e) {
-                console.error(e);
-            }
+                document.getElementById('rn').innerText = (d.hourly.precipitation_probability[new Date().getHours()] || 0)+"% CHUVA";
+            } catch(e) {}
         }
 
         async function getA() {
             try {
                 const r = await fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vQEfr4nu_M1gVlE2d2cUZdpgKwVgffuXMlNk5VSpxu9yJwVOCvnekQTwJ82BezSGTiMT0CCnXxkK_tI/pub?gid=0&single=true&output=csv&t="+Date.now());
-                const t = await r.text(); /* CSV publicado via Google Sheets. [web:66] */
-                const lines = t.split(/
-?
-/).slice(1).filter(l => l.trim() !== "");
-                let html = ''; let tk = '';
-                
-                if(lines.length > 0) {
-                    const latest = lines[lines.length - 1]
-                        .split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/)
-                        .map(s => s.replace(/"/g,'').trim());
-                    const currentId = (latest[2] || "") + (latest[3] || "");
-                    if (lastAlertId !== "" && lastAlertId !== currentId && 'Notification' in window && Notification.permission === "granted") {
-                        new Notification(`⚠️ ${latest[1]}`, {
-                            body: latest[2],
-                            icon: "logo.png"
-                        });
+                const t = await r.text();
+                let lines = t.split(/\r?\n/).slice(1);
+                let data = lines.map(l => l.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(s => s.replace(/"/g,'').trim())).filter(c => c.length >= 3);
+                data.sort((a, b) => (b[3] || "").localeCompare(a[3] || ""));
+
+                if(data.length > 0) {
+                    const cId = data[0][2] + data[0][3];
+                    if (lastId !== "" && lastId !== cId && Notification.permission === "granted") {
+                        new Notification(`⚠️ ${data[0][1]}`, { body: data[0][2] });
                     }
-                    lastAlertId = currentId;
+                    lastId = cId;
                 }
 
-                lines.reverse().forEach(l => {
-                    const c = l
-                        .split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/)
-                        .map(s => s.replace(/"/g,'').trim());
-                    if(c.length >= 3) {
-                        let colorClass = "txt-info";
-                        let mU = c[2].toUpperCase(); let tU = c[0].toUpperCase();
-                        if(mU.includes("ACIDENTE") || tU.includes("ACIDENTE")) colorClass = "txt-acidente";
-                        else if(tU.includes("AVARIA") || mU.includes("AVARIADO")) colorClass = "txt-avaria";
-                        
-                        html += `<div class="card ${colorClass}">
-                            <div class="h">
-                                <span class="time">🕒 ${c[3]||'--:--'}</span>
-                                <span class="type-tag">${c[0]}</span>
-                            </div>
-                            <span class="loc-row">📍 ${c[1]}</span>
-                            <div class="msg">${c[2]}</div>
-                        </div>`;
-                        tk += ` 🚨 ${c[1]}: ${c[2]} | `;
-                    }
+                let h = ''; let tk = '';
+                data.forEach(c => {
+                    let cl = "txt-info";
+                    let m = c[2].toUpperCase(); let t = c[0].toUpperCase();
+                    if(m.includes("ACIDENTE") || t.includes("ACIDENTE")) cl = "txt-acidente";
+                    else if(t.includes("AVARIA") || m.includes("AVARIADO")) cl = "txt-avaria";
+                    
+                    h += `<div class="card ${cl}"><div class="h"><span class="time">🕒 ${c[3]||'--:--'}</span><span class="type-tag">${c[0]}</span></div><span class="loc-row">📍 ${c[1]}</span><div class="msg">${c[2]}</div></div>`;
+                    tk += ` 🚨 ${c[1]}: ${c[2]} | `;
                 });
-                document.getElementById('feed').innerHTML = html;
-                document.getElementById('ticker').innerText =
-                    tk || "Sem ocorrências registadas neste momento.";
-            } catch(e) {
-                console.error(e);
-            }
+                document.getElementById('feed').innerHTML = h;
+                document.getElementById('ticker').innerText = tk;
+            } catch(e) {}
         }
 
-        getW();
-        getA();
-        setInterval(getA, 20000);
-        setInterval(getW, 600000);
-
-        if('Notification' in window && Notification.permission === "granted") {
-            document.getElementById('bell').style.background = 'var(--g)';
-        }
+        getW(); getA(); setInterval(getA, 20000); setInterval(getW, 600000);
+        if(Notification.permission === "granted") document.getElementById('bell').style.background = 'var(--g)';
     </script>
 </body>
 </html>

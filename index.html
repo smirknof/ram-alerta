@@ -7,7 +7,6 @@
     
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#000000">
-    <link rel="icon" type="image/png" href="icon.png">
 
     <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
     <script>
@@ -24,98 +23,98 @@
     <style>
         * { box-sizing: border-box; }
         body { background-color: #000; color: #fff; font-family: -apple-system, sans-serif; margin: 0; padding: 15px; display: flex; flex-direction: column; align-items: center; }
-        
         .main-wrapper { width: 100%; max-width: 400px; }
-
-        /* Banner Principal */
         .header-img { width: 100%; border-radius: 20px; border: 1px solid #222; margin-bottom: 15px; }
-
-        /* Botões de Ação */
-        .btn { width: 100%; padding: 18px; border-radius: 12px; font-weight: bold; text-align: center; margin-bottom: 12px; font-size: 14px; text-transform: uppercase; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .btn { width: 100%; padding: 18px; border-radius: 12px; font-weight: bold; text-align: center; margin-bottom: 12px; font-size: 14px; text-transform: uppercase; border: none; }
         .btn-blue { background: #339af0; color: #000; }
-        .btn-red { background: #ff4d4d; color: #fff; font-size: 18px; box-shadow: 0 0 20px rgba(255, 77, 77, 0.2); }
-
-        /* Grid de Informação */
+        .btn-red { background: #ff4d4d; color: #fff; font-size: 18px; }
         .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
         .card { background: #121212; border: 1px solid #222; border-radius: 15px; padding: 15px; text-align: center; }
         .card h2 { margin: 0; font-size: 26px; }
-        .card p { margin: 5px 0 0; font-size: 10px; color: #666; text-transform: uppercase; letter-spacing: 1px; }
+        .card p { margin: 5px 0 0; font-size: 10px; color: #666; text-transform: uppercase; }
         .text-blue { color: #339af0; }
-
-        /* Contactos */
-        .contact-card { background: #121212; border: 1px solid #222; border-radius: 12px; padding: 10px; text-align: center; }
-        .contact-card h3 { margin: 0; color: #fcc419; font-size: 16px; }
-
-        /* Status de Alerta (Onde a Coluna C aparece) */
-        .alert-box { background: #121212; border: 1px solid #333; border-radius: 20px; padding: 20px; margin-top: 10px; border-left: 4px solid #333; }
-        .alert-header { display: flex; justify-content: space-between; font-size: 12px; color: #666; margin-bottom: 10px; }
-        .alert-content { font-size: 16px; font-weight: bold; color: #fff; }
-        .status-dot { height: 8px; width: 8px; background: #4CAF50; border-radius: 50%; display: inline-block; margin-right: 5px; box-shadow: 0 0 5px #4CAF50; }
-
-        /* Rodapé Social */
+        .alert-box { background: #121212; border: 1px solid #333; border-radius: 20px; padding: 20px; border-left: 4px solid #339af0; }
+        .alert-content { font-size: 16px; font-weight: bold; color: #fff; margin-top: 5px; }
         .social-footer { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
         .btn-social { padding: 12px; border-radius: 10px; border: none; font-weight: bold; font-size: 12px; color: #fff; }
-        .bg-fb { background: #3b5998; }
-        .bg-tg { background: #0088cc; }
     </style>
 </head>
 <body>
 
     <div class="main-wrapper">
         <img src="logo.png" alt="RAM ALERTA" class="header-img">
-
-        <button class="btn btn-blue">📡 Radares e Câmaras Vialitoral</button>
+        <button class="btn btn-blue" onclick="window.open('https://www.vialitoral.com/', '_blank')">📡 Radares e Câmaras Vialitoral</button>
 
         <div class="info-grid">
             <div class="card">
                 <h2 id="time">00:00:00</h2>
                 <p>Hora Atual</p>
             </div>
-            <div class="card">
-                <h2 class="text-blue">14°C</h2>
-                <p>Céu Limpo</p>
-            </div>
+            <div class="card"><h2 class="text-blue">14°C</h2><p>Céu Limpo</p></div>
         </div>
 
         <div class="info-grid">
-            <div class="contact-card">
-                <h3>800 205 215</h3>
-                <p>VIALITORAL</p>
-            </div>
-            <div class="contact-card">
-                <h3>800 241 241</h3>
-                <p>VIAEXPRESSO</p>
-            </div>
+            <div class="card" style="padding:10px;"><h3 style="color:#fcc419;margin:0;">800 205 215</h3><p>VIALITORAL</p></div>
+            <div class="card" style="padding:10px;"><h3 style="color:#fcc419;margin:0;">800 241 241</h3><p>VIAEXPRESSO</p></div>
         </div>
 
-        <button class="btn btn-red">🚑 112 EMERGÊNCIA</button>
+        <button class="btn btn-red" onclick="window.location.href='tel:112'">🚑 112 EMERGÊNCIA</button>
 
         <div class="alert-box">
-            <div class="alert-header">
-                <span>🕒 <b class="text-blue">ATIVO</b></span>
-                <span>informação</span>
+            <div style="display:flex; justify-content:space-between; font-size:12px; color:#339af0;">
+                <span>🕒 <b id="update-time">A ATUALIZAR</b></span>
+                <span style="color:#666;">informação</span>
             </div>
             <div class="alert-content">
                 📍 Madeira<br>
-                <span id="last-msg" style="color: #888; font-size: 14px;">A AGUARDAR DADOS...</span>
+                <span id="dados-folha" style="color: #4dabf7; font-size: 14px;">A LER GOOGLE SHEETS...</span>
             </div>
-            <div style="margin-top: 15px; font-size: 10px; color: #444;">
-                <span class="status-dot"></span> V14 - OPERACIONAL - SANDRO FERREIRA
-            </div>
+            <div style="margin-top:10px; font-size:10px; color:#444;">V14.2 - OPERACIONAL - SANDRO FERREIRA</div>
         </div>
 
         <div class="social-footer">
-            <button class="btn-social bg-fb">FACEBOOK</button>
-            <button class="btn-social bg-tg">TELEGRAM</button>
+            <button class="btn-social" style="background:#3b5998;">FACEBOOK</button>
+            <button class="btn-social" style="background:#0088cc;">TELEGRAM</button>
         </div>
     </div>
 
     <script>
+        // Relógio em tempo real
         function clock() {
-            const d = new Date();
-            document.getElementById('time').innerHTML = d.toLocaleTimeString('pt-PT');
+            document.getElementById('time').innerHTML = new Date().toLocaleTimeString('pt-PT');
         }
         setInterval(clock, 1000); clock();
+
+        // MOTOR DE BUSCA DE DADOS (USANDO O TEU ID DE FOLHA)
+        const SHEET_ID = '12A_P5Oskh9l-7Lq55u7rC6YfF48-0V9y_9j3I1q5V0k'; // ID detetado no teu sistema
+        const URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&range=A2:C2`;
+
+        async function buscarDados() {
+            try {
+                const response = await fetch(URL);
+                const data = await response.text();
+                // O Google CSV separa por vírgulas e aspas
+                const linhas = data.split('\n');
+                const colunas = linhas[0].split('","');
+                
+                const tipo = colunas[0].replace(/"/g, "");
+                const local = colunas[1].replace(/"/g, "");
+                const msg = colunas[2].replace(/"/g, "");
+
+                if (tipo && local && msg) {
+                    document.getElementById('dados-folha').innerHTML = `<b>${tipo}:</b> ${local} - ${msg}`;
+                    document.getElementById('update-time').innerText = "RECENTE";
+                } else {
+                    document.getElementById('dados-folha').innerText = "SEM ALERTAS ATIVOS";
+                }
+            } catch (error) {
+                document.getElementById('dados-folha').innerText = "ERRO NA LIGAÇÃO À FOLHA";
+            }
+        }
+        
+        // Verifica novos dados a cada 10 segundos para ser quase instantâneo
+        setInterval(buscarDados, 10000);
+        buscarDados();
     </script>
 </body>
 </html>

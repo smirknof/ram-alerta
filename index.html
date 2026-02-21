@@ -17,26 +17,21 @@
     <script>
       window.OneSignalDeferred = window.OneSignalDeferred || [];
       OneSignalDeferred.push(async function(OneSignal) {
-        await OneSignal.init({
-          appId: "ab3ef110-1713-4982-955a-f59b80a84170",
-          // NOVO: Adicionado para suporte em iPhones (Safari)
-          safari_web_id: "web.onesignal.auto.1983278a-c63e-4340-9f2d-888d37482813", 
-          notifyButton: {
-            enable: true,
-            size: 'medium',
-            theme: 'default',
-            position: 'bottom-right',
-            offset: { bottom: '85px', right: '15px' },
-            colors: { 'circle.background': '#ffcc00', 'circle.foreground': '#000000', 'badge.background': '#ff4d4d' }
-          }
-        });
-
-        // NOVO: Ouvinte para confirmar se a subscrição foi feita
-        OneSignal.User.PushSubscription.addEventListener("change", (event) => {
-            if(event.current.token) {
-                console.log("Subscrição confirmada!");
-            }
-        });
+        try {
+            await OneSignal.init({
+              appId: "ab3ef110-1713-4982-955a-f59b80a84170",
+              safari_web_id: "web.onesignal.auto.1983278a-c63e-4340-9f2d-888d37482813",
+              notifyButton: {
+                enable: true,
+                size: 'medium',
+                theme: 'default',
+                position: 'bottom-right',
+                offset: { bottom: '85px', right: '15px' },
+                displayPredicate: function() { return true; }, // Força a exibição
+                colors: { 'circle.background': '#ffcc00', 'circle.foreground': '#000000', 'badge.background': '#ff4d4d' }
+              }
+            });
+        } catch (e) { console.error("Erro OneSignal:", e); }
       });
     </script>
 
@@ -57,10 +52,8 @@
         #sound-status { font-size: 10px; position: absolute; top: 5px; right: 10px; color: var(--f); }
         .btns-c { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
         .btn-call { background: #111; color: var(--y); text-decoration: none; padding: 12px; border-radius: 12px; text-align: center; border: 1px solid #333; font-weight: 900; display: flex; flex-direction: column; }
-        .btn-e { background: var(--f); color: #fff; text-decoration: none; padding: 18px; border-radius: 15px; display: block; margin-bottom: 5px; font-weight: 900; text-align: center; font-size: 1.2rem; text-transform: uppercase; animation: pulse-red 2s infinite; }
-        
-        /* NOVO: Estilo do botão de teste */
-        .btn-test { width: 100%; padding: 10px; background: #222; color: #888; border: 1px solid #444; border-radius: 10px; margin-bottom: 20px; font-weight: 800; font-size: 0.7rem; text-transform: uppercase; cursor: pointer; }
+        .btn-e { background: var(--f); color: #fff; text-decoration: none; padding: 18px; border-radius: 15px; display: block; margin-bottom: 10px; font-weight: 900; text-align: center; font-size: 1.2rem; text-transform: uppercase; animation: pulse-red 2s infinite; }
+        .btn-test { width: 100%; padding: 12px; background: #222; color: #aaa; border: 1px solid #444; border-radius: 10px; margin-bottom: 20px; font-weight: 800; font-size: 0.75rem; text-transform: uppercase; cursor: pointer; }
 
         .card { background: var(--c); border-radius: 18px; padding: 18px; margin-bottom: 15px; border-left: 8px solid #444; position: relative; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
         .card-critico { border-left-color: var(--f); animation: pulse-red 2.5s infinite; }
@@ -90,14 +83,10 @@
             <a href="tel:800205215" class="btn-call"><span>800 205 215</span><small>VIALITORAL</small></a>
             <a href="tel:800241241" class="btn-call"><span>800 241 241</span><small>VIAEXPRESSO</small></a>
         </div>
-        
         <a href="tel:112" class="btn-e">🚑 112 EMERGÊNCIA</a>
-        
-        <button onclick="testPush()" class="btn-test">🔍 TESTAR PERMISSÃO DE NOTIFICAÇÃO</button>
-
+        <button onclick="testPush()" class="btn-test">🔍 TESTAR NOTIFICAÇÃO</button>
         <div id="feed"></div>
     </div>
-    
     <div class="nav">
         <a href="https://www.facebook.com/share/g/1ATEH8rvEb/" style="background:#1877F2">FACEBOOK</a>
         <a href="https://t.me/acidenteseocorrenciasnaram" style="background:#0088cc">TELEGRAM</a>
@@ -109,18 +98,11 @@
 
         function enableAudio() { if (!audioContext) { audioContext = new (window.AudioContext || window.webkitAudioContext)(); document.getElementById('sound-status').innerText = "🔊 Som OK"; document.getElementById('sound-status').style.color = "#00ff88"; isAudioEnabled = true; } }
 
-        // NOVO: Função de teste de push local
         async function testPush() {
-            if (Notification.permission === "default") {
-                Notification.requestPermission();
-            } else if (Notification.permission === "denied") {
-                alert("As notificações estão bloqueadas no teu navegador/telemóvel. Ativa-as nas definições!");
-            } else {
-                new Notification("🚨 RAM ALERTA ATIVO", {
-                    body: "As notificações locais estão configuradas corretamente!",
-                    icon: "Icon.png"
-                });
-            }
+            if (Notification.permission === "default") { await Notification.requestPermission(); }
+            if (Notification.permission === "granted") {
+                new Notification("🚨 TESTE RAM ALERTA", { body: "Notificações locais a funcionar!", icon: "Icon.png" });
+            } else { alert("Permissão negada. Ativa as notificações no teu Chrome/Telemóvel."); }
         }
 
         function playBeep(isCritico) {
@@ -148,23 +130,21 @@
 
         async function getA() {
             try {
-                // Adicionamos um timestamp aleatório para evitar que o navegador use dados antigos (cache)
-                const r = await fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vQEfr4nu_M1gVlE2d2cUZdpgKwVgffuXMlNk5VSpxu9yJwVOCvnekQTwJ82BezSGTiMT0CCnXxkK_tI/pub?gid=0&single=true&output=csv&cacheburst="+Date.now());
+                const r = await fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vQEfr4nu_M1gVlE2d2cUZdpgKwVgffuXMlNk5VSpxu9yJwVOCvnekQTwJ82BezSGTiMT0CCnXxkK_tI/pub?gid=0&single=true&output=csv&b="+Date.now());
                 const t = await r.text();
-                let rows = t.split(/\r?\n/).slice(1).filter(row => row.trim().length > 10);
+                let rows = t.split(/\r?\n/).slice(1).filter(row => row.trim().length > 5);
                 
                 if(rows.length > 0) {
                     let currentLast = rows[rows.length - 1];
                     if (lastAlertData !== "" && lastAlertData !== currentLast) {
-                        let c = currentLast.split(/,(?=(?:(?:[^21]*"){2})*[^"]*$)/);
+                        // CORREÇÃO DO ERRO DE PARSING (REGEX FIX)
+                        let c = currentLast.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
                         if(c[0]) {
                             let type = c[0].toUpperCase();
                             if (type.includes("ACIDENTE") || type.includes("INCÊNDIO")) playBeep(true);
                             else if (type.includes("AVARIA")) playBeep(false);
-                            
-                            // Notificação Automática (Browser Aberto)
                             if (Notification.permission === "granted") {
-                                new Notification("🚨 " + c[0].replace(/"/g,''), { body: c[1].replace(/"/g,'') + ": " + c[2].replace(/"/g,'') });
+                                new Notification("🚨 NOVO ALERTA", { body: c[1].replace(/"/g,'') + ": " + c[2].replace(/"/g,'') });
                             }
                         }
                     }
@@ -175,12 +155,13 @@
                 let reversed = [...rows].reverse();
                 reversed.forEach(row => {
                     let c = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
-                    if(c.length >= 3 && c[1].trim() !== "") {
-                        let type = c[0].replace(/"/g,'').trim();
-                        let loc = c[1].replace(/"/g,'').trim();
-                        let msg = c[2].replace(/"/g,'').trim();
+                    if(c.length >= 3) {
+                        let type = (c[0] || "").replace(/"/g,'').trim();
+                        let loc = (c[1] || "").replace(/"/g,'').trim();
+                        let msg = (c[2] || "").replace(/"/g,'').trim();
                         let time = c[3] ? c[3].replace(/"/g,'') : '--:--';
-                        
+                        if(!loc) return;
+
                         let alertClass = 'card-info';
                         let tu = type.toUpperCase();
                         if (tu.includes("ACIDENTE") || tu.includes("INCÊNDIO")) alertClass = 'card-critico';
@@ -194,9 +175,9 @@
                         tk += ` 🚨 ${loc}: ${msg} | `;
                     }
                 });
-                document.getElementById('feed').innerHTML = h || '<div style="text-align:center; padding:20px; opacity:0.5;">A aguardar dados da Google...</div>';
+                document.getElementById('feed').innerHTML = h || '<div style="text-align:center; padding:20px; opacity:0.5;">A aguardar dados...</div>';
                 if(tk) document.getElementById('ticker').innerText = tk;
-            } catch(e) {}
+            } catch(e) { console.error("Erro Feed:", e); }
         }
 
         getW(); getA();

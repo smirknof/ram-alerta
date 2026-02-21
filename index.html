@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>RAM ALERTA</title>
+    <title>RAM ALERTA - MONITORIZAÇÃO TOTAL</title>
     
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#ff4d4d">
@@ -18,80 +18,86 @@
       window.OneSignalDeferred = window.OneSignalDeferred || [];
       OneSignalDeferred.push(async function(OneSignal) {
         await OneSignal.init({
-          appId: "ab3ef110-1713-4982-955a-f59b80a84170", /* O TEU NOVO APP ID */
+          appId: "ab3ef110-1713-4982-955a-f59b80a84170",
           notifyButton: {
             enable: true,
             size: 'medium',
             theme: 'default',
             position: 'bottom-right',
-            offset: { 
-                bottom: '85px', 
-                right: '15px' 
-            },
-            colors: {
-              'circle.background': '#ffcc00',
-              'circle.foreground': '#000000', 
-              'badge.background': '#ff4d4d',
-              'badge.foreground': '#ffffff',
-              'badge.bordercolor': '#000000'
-            },
-            text: {
-              'tip.state.unsubscribed': 'Subscrever Alertas RAM',
-              'tip.state.subscribed': 'Alertas Ativos',
-              'tip.state.blocked': 'Alertas Bloqueados'
-            }
+            offset: { bottom: '85px', right: '15px' },
+            colors: { 'circle.background': '#ffcc00', 'circle.foreground': '#000000', 'badge.background': '#ff4d4d' }
           }
         });
       });
     </script>
 
     <style>
-        :root { --f: #ff4d4d; --y: #ffcc00; --g: #00ff88; --b: #050505; --c: rgba(20,20,22,0.98); --i: #00e5ff; }
-        body { font-family: -apple-system, sans-serif; background: var(--b); color: #fff; margin: 0; padding: 0; background: radial-gradient(circle at 50% 0%, #1a0000 0%, #050505 80%) fixed; overflow-x: hidden; }
+        :root { 
+            --f: #ff4d4d; --y: #ffcc00; --g: #00ff88; --b: #050505; 
+            --c: rgba(20,20,22,0.98); --i: #00e5ff; 
+        }
+
+        body { 
+            font-family: -apple-system, sans-serif; background: var(--b); color: #fff; margin: 0; padding: 0; 
+            background: radial-gradient(circle at 50% 0%, #1a0000 0%, #050505 80%) fixed; overflow-x: hidden; 
+        }
         
         .t-wrap { position: sticky; top: 0; overflow: hidden; background: #000; border-bottom: 2px solid var(--f); z-index: 4000; backdrop-filter: blur(10px); }
         .t { display: flex; white-space: nowrap; padding: 12px 0; animation: t 35s linear infinite; font-weight: 900; font-size: 0.8rem; color: var(--y); text-transform: uppercase; }
         @keyframes t { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
 
         .cont { padding: 14px; padding-bottom: 150px; }
+        .logo-box { width: 100%; height: 100px; border-radius: 20px; display: flex; align-items: center; justify-content: center; background: #000; border: 1px solid #222; margin-bottom: 15px; }
+        .logo-box img { max-width: 60%; max-height: 80px; }
         
-        .logo-box { width: 100%; height: 130px; border-radius: 20px; display: flex; align-items: center; justify-content: center; background: #000; border: 1px solid #222; margin-bottom: 15px; }
-        .logo-box img { max-width: 80%; max-height: 100px; }
-        
-        .btn-radar { background: linear-gradient(135deg, #0066ff, #00d4ff); color: #fff; text-decoration: none; padding: 15px; border-radius: 12px; display: block; margin-bottom: 12px; font-weight: 900; text-align: center; text-transform: uppercase; font-size: 0.85rem; box-shadow: 0 4px 15px rgba(0,102,255,0.3); }
+        .btn-radar { background: linear-gradient(135deg, #0066ff, #00d4ff); color: #fff; text-decoration: none; padding: 15px; border-radius: 12px; display: block; margin-bottom: 12px; font-weight: 900; text-align: center; text-transform: uppercase; font-size: 0.85rem; }
 
         .dash { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
-        .box { background: var(--c); border-radius: 15px; padding: 12px; border: 1px solid #333; text-align: center; }
+        .box { background: var(--c); border-radius: 15px; padding: 12px; border: 1px solid #333; text-align: center; position: relative; }
         .v { font-size: 1.5rem; font-weight: 900; font-family: monospace; }
         .lbl { font-size: 0.6rem; color: #888; text-transform: uppercase; margin-top: 4px; }
+        
+        /* Indicador de Som */
+        #sound-status { font-size: 10px; position: absolute; top: 5px; right: 10px; color: var(--f); }
 
         .btns-c { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
         .btn-call { background: #111; color: var(--y); text-decoration: none; padding: 12px; border-radius: 12px; text-align: center; border: 1px solid #333; font-weight: 900; display: flex; flex-direction: column; }
-        .btn-call small { color: #666; font-size: 0.55rem; margin-top: 2px; }
         
-        .btn-e { background: var(--f); color: #fff; text-decoration: none; padding: 18px; border-radius: 15px; display: block; margin-bottom: 20px; font-weight: 900; text-align: center; font-size: 1.2rem; text-transform: uppercase; animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(255,77,77,0.7); } 70% { box-shadow: 0 0 0 15px rgba(255,77,77,0); } 100% { box-shadow: 0 0 0 0 rgba(255,77,77,0); } }
+        .btn-e { background: var(--f); color: #fff; text-decoration: none; padding: 18px; border-radius: 15px; display: block; margin-bottom: 20px; font-weight: 900; text-align: center; font-size: 1.2rem; text-transform: uppercase; animation: pulse-red 2s infinite; }
 
-        .card { background: var(--c); border-radius: 18px; padding: 18px; margin-bottom: 12px; border-left: 6px solid #444; position: relative; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
-        .txt-acidente { border-left-color: var(--f); background: linear-gradient(90deg, rgba(255,77,77,0.05), transparent); }
+        /* CARDS DINÂMICOS */
+        .card { background: var(--c); border-radius: 18px; padding: 18px; margin-bottom: 15px; border-left: 8px solid #444; position: relative; box-shadow: 0 5px 15px rgba(0,0,0,0.5); transition: 0.3s; }
+        .card-critico { border-left-color: var(--f); animation: pulse-red 2.5s infinite; }
+        .card-avaria { border-left-color: var(--y); animation: pulse-yellow 3s infinite; }
+        .card-info { border-left-color: var(--g); animation: pulse-green 4s infinite; }
+
+        @keyframes pulse-red { 0% { box-shadow: 0 0 0 0 rgba(255, 77, 77, 0.4); } 70% { box-shadow: 0 0 0 12px rgba(255, 77, 77, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 77, 77, 0); } }
+        @keyframes pulse-yellow { 0% { box-shadow: 0 0 0 0 rgba(255, 204, 0, 0.3); } 70% { box-shadow: 0 0 0 10px rgba(255, 204, 0, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 204, 0, 0); } }
+        @keyframes pulse-green { 0% { box-shadow: 0 0 0 0 rgba(0, 255, 136, 0.2); } 70% { box-shadow: 0 0 0 8px rgba(0, 255, 136, 0); } 100% { box-shadow: 0 0 0 0 rgba(0, 255, 136, 0); } }
+
         .h { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 5px; }
         .time { font-size: 1.1rem; font-weight: 900; }
-        .msg { font-weight: 700; font-size: 0.85rem; text-transform: uppercase; color: #eee; line-height: 1.4; }
+        .type-tag { font-size: 0.65rem; font-weight: 900; text-transform: uppercase; padding: 2px 8px; border-radius: 5px; background: rgba(255,255,255,0.1); }
+        .msg { font-weight: 700; font-size: 0.9rem; text-transform: uppercase; color: #eee; line-height: 1.4; }
 
         .nav { position: fixed; bottom: 0; left: 0; right: 0; background: #000; display: flex; gap: 8px; padding: 15px; border-top: 2px solid var(--f); z-index: 4000; }
         .nav a { flex: 1; text-align: center; padding: 12px; border-radius: 10px; text-decoration: none; font-weight: 900; color: #fff; font-size: 0.65rem; text-transform: uppercase; }
     </style>
 </head>
-<body>
-    <div class="t-wrap"><div class="t" id="ticker">RAM ALERTA V26 - A SINCRONIZAR DADOS DA ILHA...</div></div>
+<body onclick="enableAudio()">
+    <div class="t-wrap"><div class="t" id="ticker">RAM ALERTA - MONITORIZAÇÃO ATIVA...</div></div>
     
     <div class="cont">
         <div class="logo-box"><img src="logo.png" alt="RAM ALERTA"></div>
 
-        <a href="https://www.vialitoral.com/map" target="_blank" class="btn-radar">📡 RADARES E CÂMARAS VIALITORAL</a>
+        <a href="https://www.vialitoral.com/map" target="_blank" class="btn-radar">📡 CÂMARAS E RADARES</a>
         
         <div class="dash">
-            <div class="box"><div class="v" id="clock">00:00:00</div><div class="lbl">HORA</div></div>
+            <div class="box">
+                <span id="sound-status">🔇 Som Off</span>
+                <div class="v" id="clock">00:00:00</div>
+                <div class="lbl">HORA</div>
+            </div>
             <div class="box"><div class="v" id="w" style="color:var(--i)">--°C</div><div class="lbl" id="rn">MADEIRA</div></div>
         </div>
         
@@ -101,7 +107,6 @@
         </div>
         
         <a href="tel:112" class="btn-e">🚑 112 EMERGÊNCIA</a>
-        
         <div id="feed"></div>
     </div>
 
@@ -112,6 +117,34 @@
 
     <script>
         let lastAlertData = ""; 
+        let audioContext;
+        let isAudioEnabled = false;
+
+        // Função para ativar o áudio após o primeiro clique do utilizador
+        function enableAudio() {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                document.getElementById('sound-status').innerText = "🔊 Som OK";
+                document.getElementById('sound-status').style.color = "#00ff88";
+                isAudioEnabled = true;
+            }
+        }
+
+        // Gera um Beep Sintético (A5 - 880Hz)
+        function playBeep(isCritico) {
+            if (!isAudioEnabled) return;
+            const osc = audioContext.createOscillator();
+            const gain = audioContext.createGain();
+            osc.connect(gain);
+            gain.connect(audioContext.destination);
+            
+            osc.frequency.setValueAtTime(isCritico ? 880 : 440, audioContext.currentTime);
+            gain.gain.setValueAtTime(0.1, audioContext.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+            
+            osc.start();
+            osc.stop(audioContext.currentTime + 0.5);
+        }
 
         function upClock() { document.getElementById('clock').innerText = new Date().toLocaleTimeString('pt-PT', {hour12:false}); }
         setInterval(upClock, 1000); upClock();
@@ -121,8 +154,7 @@
                 const r = await fetch("https://api.open-meteo.com/v1/forecast?latitude=32.65&longitude=-16.90&current_weather=true&hourly=precipitation_probability");
                 const d = await r.json();
                 document.getElementById('w').innerText = Math.round(d.current_weather.temperature)+"°C";
-                const rain = d.hourly.precipitation_probability[new Date().getHours()] || 0;
-                document.getElementById('rn').innerText = rain + "% CHUVA";
+                document.getElementById('rn').innerText = (d.hourly.precipitation_probability[new Date().getHours()] || 0) + "% CHUVA";
             } catch(e) {}
         }
 
@@ -134,13 +166,21 @@
                 
                 if(rows.length > 0) {
                     let currentLast = rows[rows.length - 1];
+                    // DETEÇÃO DE NOVO ALERTA
                     if (lastAlertData !== "" && lastAlertData !== currentLast) {
                         let c = currentLast.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+                        let type = c[0].toUpperCase();
+                        
+                        // TOCA SOM SE FOR CRÍTICO OU AVARIA
+                        if (type.includes("ACIDENTE") || type.includes("INCÊNDIO")) {
+                            playBeep(true); 
+                        } else if (type.includes("AVARIA")) {
+                            playBeep(false);
+                        }
+
+                        // Notificação Push nativa se permitido
                         if (Notification.permission === "granted") {
-                            new Notification("🚨 RAM ALERTA", {
-                                body: c[1].replace(/"/g,'') + ": " + c[2].replace(/"/g,''),
-                                icon: "Icon.png"
-                            });
+                            new Notification("🚨 NOVO ALERTA RAM", { body: c[1] + ": " + c[2] });
                         }
                     }
                     lastAlertData = currentLast;
@@ -149,17 +189,21 @@
                 let h = ''; let tk = '';
                 let reversed = [...rows].reverse();
                 reversed.forEach(row => {
-                    let c = row.split(/,(?=(?:(?:[^"]*"){2})*[^**"]*$)/);
+                    let c = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
                     if(c.length >= 3) {
-                        let type = c[0].replace(/"/g,'');
-                        let loc = c[1].replace(/"/g,'');
-                        let msg = c[2].replace(/"/g,'');
+                        let type = c[0].replace(/"/g,'').trim();
+                        let loc = c[1].replace(/"/g,'').trim();
+                        let msg = c[2].replace(/"/g,'').trim();
                         let time = c[3] ? c[3].replace(/"/g,'') : '--:--';
-                        let isAc = type.toUpperCase().includes("ACIDENTE");
                         
-                        h += `<div class="card ${isAc?'txt-acidente':''}">
-                            <div class="h"><span class="time">🕒 ${time}</span><span style="font-size:0.6rem; opacity:0.5;">${type}</span></div>
-                            <div style="color:var(--i); font-weight:800; margin-bottom:5px;">📍 ${loc}</div>
+                        let alertClass = 'card-info';
+                        let tu = type.toUpperCase();
+                        if (tu.includes("ACIDENTE") || tu.includes("INCÊNDIO")) alertClass = 'card-critico';
+                        else if (tu.includes("AVARIA")) alertClass = 'card-avaria';
+                        
+                        h += `<div class="card ${alertClass}">
+                            <div class="h"><span class="time">🕒 ${time}</span><span class="type-tag">${type}</span></div>
+                            <div style="color:var(--i); font-weight:800; margin-bottom:5px; font-size:1rem;">📍 ${loc}</div>
                             <div class="msg">${msg}</div>
                         </div>`;
                         tk += ` 🚨 ${loc}: ${msg} | `;
@@ -171,7 +215,7 @@
         }
 
         getW(); getA();
-        setInterval(getA, 10000);
+        setInterval(getA, 10000); 
         setInterval(getW, 600000);
     </script>
 </body>

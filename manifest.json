@@ -1,7 +1,8 @@
 {
   "name": "RAM Alerta",
   "short_name": "RAM Alerta",
-  "start_url": "/",
+  "description": "Sistema de Alertas da Madeira",
+  "start_url": "/ram-alerta/",
   "display": "standalone",
   "background_color": "#121212",
   "theme_color": "#ff0000",
@@ -9,7 +10,14 @@
     {
       "src": "icon.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ]
 }

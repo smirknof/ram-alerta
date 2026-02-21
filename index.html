@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>RAM ALERTA</title>
+    <title>RAM ALERTA - V26 TOTAL PUSH</title>
     
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#ff4d4d">
@@ -14,32 +14,36 @@
     <link rel="apple-touch-icon" href="Icon.png">
 
     <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
-<script>
-  window.OneSignalDeferred = window.OneSignalDeferred || [];
-  OneSignalDeferred.push(async function(OneSignal) {
-    await OneSignal.init({
-      appId: "3892797e-d00e-4365-8302-6022c0cf8498",
-      notifyButton: {
-        enable: true, // ESTA É A LINHA QUE ATIVA O SINO
-        size: 'medium',
-        position: 'bottom-right',
-        offset: { bottom: '100px', right: '15px' },
-        colors: {
-            'circle.background': '#ffcc00',
-            'circle.foreground': 'black'
-        }
-      },
-    });
-  });
-</script>
-
-
+    <script>
+      window.OneSignalDeferred = window.OneSignalDeferred || [];
+      OneSignalDeferred.push(async function(OneSignal) {
+        await OneSignal.init({
+          appId: "3892797e-d00e-4365-8302-6022c0cf8498",
+          notifyButton: {
+            enable: true,
+            size: 'medium',
+            theme: 'default',
+            position: 'bottom-right',
+            offset: { bottom: '100px', right: '15px' },
+            colors: {
+              'circle.background': '#ffcc00',
+              'circle.foreground': 'black',
+              'badge.background': '#ff4d4d'
+            },
+            text: {
+              'tip.state.unsubscribed': 'Subscrever Alertas',
+              'tip.state.subscribed': 'Alertas Ativos'
+            }
+          },
+        });
+      });
+    </script>
 
     <style>
         :root { --f: #ff4d4d; --y: #ffcc00; --g: #00ff88; --b: #050505; --c: rgba(20,20,22,0.98); --i: #00e5ff; }
         body { font-family: -apple-system, sans-serif; background: var(--b); color: #fff; margin: 0; padding: 0; background: radial-gradient(circle at 50% 0%, #1a0000 0%, #050505 80%) fixed; overflow-x: hidden; }
         
-        .t-wrap { position: sticky; top: 0; overflow: hidden; background: #000; border-bottom: 2px solid var(--f); z-index: 4000; }
+        .t-wrap { position: sticky; top: 0; overflow: hidden; background: #000; border-bottom: 2px solid var(--f); z-index: 4000; backdrop-filter: blur(10px); }
         .t { display: flex; white-space: nowrap; padding: 12px 0; animation: t 35s linear infinite; font-weight: 900; font-size: 0.8rem; color: var(--y); text-transform: uppercase; }
         @keyframes t { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
 
@@ -48,21 +52,21 @@
         .logo-box { width: 100%; height: 130px; border-radius: 20px; display: flex; align-items: center; justify-content: center; background: #000; border: 1px solid #222; margin-bottom: 15px; }
         .logo-box img { max-width: 80%; max-height: 100px; }
         
-        .btn-radar { background: linear-gradient(135deg, #0066ff, #00d4ff); color: #fff; text-decoration: none; padding: 15px; border-radius: 12px; display: block; margin-bottom: 12px; font-weight: 900; text-align: center; text-transform: uppercase; font-size: 0.85rem; border: none; }
+        .btn-radar { background: linear-gradient(135deg, #0066ff, #00d4ff); color: #fff; text-decoration: none; padding: 15px; border-radius: 12px; display: block; margin-bottom: 12px; font-weight: 900; text-align: center; text-transform: uppercase; font-size: 0.85rem; box-shadow: 0 4px 15px rgba(0,102,255,0.3); }
 
         .dash { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
         .box { background: var(--c); border-radius: 15px; padding: 12px; border: 1px solid #333; text-align: center; }
         .v { font-size: 1.5rem; font-weight: 900; font-family: monospace; }
-        .lbl { font-size: 0.6rem; color: #888; text-transform: uppercase; }
+        .lbl { font-size: 0.6rem; color: #888; text-transform: uppercase; margin-top: 4px; }
 
         .btns-c { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
         .btn-call { background: #111; color: var(--y); text-decoration: none; padding: 12px; border-radius: 12px; text-align: center; border: 1px solid #333; font-weight: 900; display: flex; flex-direction: column; }
-        .btn-call small { color: #666; font-size: 0.55rem; }
+        .btn-call small { color: #666; font-size: 0.55rem; margin-top: 2px; }
         
-        .btn-e { background: var(--f); color: #fff; text-decoration: none; padding: 18px; border-radius: 15px; display: block; margin-bottom: 20px; font-weight: 900; text-align: center; font-size: 1.2rem; animation: pulse 2s infinite; }
+        .btn-e { background: var(--f); color: #fff; text-decoration: none; padding: 18px; border-radius: 15px; display: block; margin-bottom: 20px; font-weight: 900; text-align: center; font-size: 1.2rem; text-transform: uppercase; animation: pulse 2s infinite; }
         @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(255,77,77,0.7); } 70% { box-shadow: 0 0 0 15px rgba(255,77,77,0); } 100% { box-shadow: 0 0 0 0 rgba(255,77,77,0); } }
 
-        .card { background: var(--c); border-radius: 18px; padding: 18px; margin-bottom: 12px; border-left: 6px solid #444; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+        .card { background: var(--c); border-radius: 18px; padding: 18px; margin-bottom: 12px; border-left: 6px solid #444; position: relative; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
         .txt-acidente { border-left-color: var(--f); background: linear-gradient(90deg, rgba(255,77,77,0.05), transparent); }
         .h { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 5px; }
         .time { font-size: 1.1rem; font-weight: 900; }
@@ -73,10 +77,11 @@
     </style>
 </head>
 <body>
-    <div class="t-wrap"><div class="t" id="ticker">RAM ALERTA V26 MASTER - SISTEMA PUSH ACTIVADO</div></div>
+    <div class="t-wrap"><div class="t" id="ticker">RAM ALERTA V26 - A SINCRONIZAR DADOS DA ILHA...</div></div>
     
     <div class="cont">
-        <div class="logo-box"><img src="logo.png"></div>
+        <div class="logo-box"><img src="logo.png" alt="RAM ALERTA"></div>
+
         <a href="https://www.vialitoral.com/map" target="_blank" class="btn-radar">📡 RADARES E CÂMARAS VIALITORAL</a>
         
         <div class="dash">
@@ -90,6 +95,7 @@
         </div>
         
         <a href="tel:112" class="btn-e">🚑 112 EMERGÊNCIA</a>
+        
         <div id="feed"></div>
     </div>
 
@@ -122,11 +128,14 @@
                 
                 if(rows.length > 0) {
                     let currentLast = rows[rows.length - 1];
-                    // Gatilho imediato para mudanças na folha
+                    // Gatilho visual imediato para quando estás com o site aberto
                     if (lastAlertData !== "" && lastAlertData !== currentLast) {
                         let c = currentLast.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
                         if (Notification.permission === "granted") {
-                            new Notification("🚨 RAM ALERTA", { body: c[1].replace(/"/g,'') + ": " + c[2].replace(/"/g,'') });
+                            new Notification("🚨 RAM ALERTA", {
+                                body: c[1].replace(/"/g,'') + ": " + c[2].replace(/"/g,''),
+                                icon: "Icon.png"
+                            });
                         }
                     }
                     lastAlertData = currentLast;
@@ -135,13 +144,15 @@
                 let h = ''; let tk = '';
                 let reversed = [...rows].reverse();
                 reversed.forEach(row => {
-                    let c = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+                    let c = row.split(/,(?=(?:(?:[^"]*"){2})*[^**"]*$)/);
                     if(c.length >= 3) {
                         let type = c[0].replace(/"/g,'');
                         let loc = c[1].replace(/"/g,'');
                         let msg = c[2].replace(/"/g,'');
                         let time = c[3] ? c[3].replace(/"/g,'') : '--:--';
-                        h += `<div class="card ${type.toUpperCase().includes("ACIDENTE")?'txt-acidente':''}">
+                        let isAc = type.toUpperCase().includes("ACIDENTE");
+                        
+                        h += `<div class="card ${isAc?'txt-acidente':''}">
                             <div class="h"><span class="time">🕒 ${time}</span><span style="font-size:0.6rem; opacity:0.5;">${type}</span></div>
                             <div style="color:var(--i); font-weight:800; margin-bottom:5px;">📍 ${loc}</div>
                             <div class="msg">${msg}</div>
@@ -155,7 +166,7 @@
         }
 
         getW(); getA();
-        setInterval(getA, 10000); // 10 Segundos
+        setInterval(getA, 10000); // 10 segundos para máxima precisão
         setInterval(getW, 600000);
     </script>
 </body>
